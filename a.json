@@ -1,0 +1,861 @@
+{
+  "items": [
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "stacked-bar-chart",
+        "pandas-bokeh"
+      ],
+      "owner": {
+        "account_id": 30095643,
+        "reputation": 1,
+        "user_id": 23063949,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/3da89d0c6c11609a670c219dfac60045?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Silberspecht",
+        "link": "https://stackoverflow.com/users/23063949/silberspecht"
+      },
+      "is_answered": false,
+      "view_count": 27,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1709458047,
+      "creation_date": 1709385376,
+      "last_edit_date": 1709458047,
+      "question_id": 78092811,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/78092811/how-to-create-a-dynamic-stacked-bar-chart-in-bokeh-with-variable-excel-inputs-an",
+      "title": "How to Create a Dynamic Stacked Bar Chart in Bokeh with Variable Excel Inputs and Outputs",
+      "body": "<p>I am currently working on a data visualisation project. I need to create a stacked bar chart using Bokeh. The data is sourced from an Excel file that is updated regularly and contains multiple inputs and outputs. The structure of the data can vary, meaning that the number of inputs and outputs can change. My aim is to ensure that the Bokeh chart can adapt to these changes automatically without requiring manual code adjustments. The stacked bar chart should be able to dynamically adjust to changes in the number of inputs and outputs in the Excel file. It should be capable of visualising various combinations of fixed inputs (e.g. input 1 fixed, input 2 fixed, input 3 variable) while displaying all corresponding outputs. Ideally, the solution would automatically read the Excel file, detect the structure of the inputs and outputs, and update the chart accordingly.</p>\n<p>I have tried to visualize the stacked bar charts for a set scenario ( 2 Inputs and 3 Outputs). in the example excel file the data was stored in a scheme like this this:</p>\n<p><strong>Example Scheme:</strong></p>\n<div class=\"s-table-container\"><table class=\"s-table\">\n<thead>\n<tr>\n<th>Input_1</th>\n<th>Input_2</th>\n<th>Output_1</th>\n<th>Output_2</th>\n<th>Output_3</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>1</td>\n<td>1</td>\n<td>100</td>\n<td>200</td>\n<td>200</td>\n</tr>\n<tr>\n<td>2</td>\n<td>1</td>\n<td>150</td>\n<td>150</td>\n<td>200</td>\n</tr>\n<tr>\n<td>3</td>\n<td>1</td>\n<td>200</td>\n<td>100</td>\n<td>200</td>\n</tr>\n<tr>\n<td>1</td>\n<td>2</td>\n<td>200</td>\n<td>200</td>\n<td>100</td>\n</tr>\n<tr>\n<td>2</td>\n<td>2</td>\n<td>150</td>\n<td>200</td>\n<td>150</td>\n</tr>\n<tr>\n<td>3</td>\n<td>2</td>\n<td>100</td>\n<td>200</td>\n<td>200</td>\n</tr>\n<tr>\n<td>1</td>\n<td>3</td>\n<td>200</td>\n<td>100</td>\n<td>200</td>\n</tr>\n<tr>\n<td>2</td>\n<td>3</td>\n<td>200</td>\n<td>150</td>\n<td>150</td>\n</tr>\n<tr>\n<td>3</td>\n<td>3</td>\n<td>200</td>\n<td>200</td>\n<td>100</td>\n</tr>\n</tbody>\n</table></div>\n<p>It worked for this static scenario:</p>\n<pre><code>import pandas as pd\nfrom bokeh.plotting import figure, output_file, show\nfrom bokeh.layouts import gridplot, row\nfrom bokeh.models import ColumnDataSource\n\n\ndata_frame = pd.read_excel(&quot;example.xlsx&quot;)\n\ndata_frame['Input_1'] = data_frame['Input_1'].astype(str)\ndata_frame['Input_2'] = data_frame['Input_2'].astype(str)\n\noutput_file(&quot;stacked_bar_charts.html&quot;)\n\nunique_input_1 = data_frame['Input_1'].unique()\nunique_input_2 = data_frame['Input_2'].unique()\n\nplots_for_input_1 = []\nplots_for_input_2 = []\n\n\nfor value in unique_input_1:\n\n    filtered_data = data_frame[data_frame[&quot;Input_1&quot;] == value]\n    filtered_data = filtered_data.sort_values(by='Input_2')\n\n    source = ColumnDataSource(filtered_data)\n\n    plot = figure(title=f&quot;Input_1 = {value} fixed&quot;,\n                  x_range=filtered_data[&quot;Input_2&quot;].unique(),\n                  height=300,\n                  width=500\n                  )\n\n    plot.xaxis.axis_label = &quot;Input_2&quot;\n\n    plot.vbar_stack(stackers=[&quot;Output_1&quot;, &quot;Output_2&quot;, &quot;Output_3&quot;],\n                    x=&quot;Input_2&quot;,\n                    width=0.9,\n                    color=[&quot;orange&quot;, &quot;gray&quot;, &quot;brown&quot;],\n                    source=source,\n                    legend_label=[&quot;Output 1&quot;, &quot;Output 2&quot;, &quot;Output 3&quot;]\n                    )\n\n    plots_for_input_1.append(plot)\n\n\nfor value in unique_input_2:\n\n    filtered_data = data_frame[data_frame['Input_2'] == value]\n    filtered_data = filtered_data.sort_values(by='Input_1')\n\n    source = ColumnDataSource(filtered_data)\n\n    plot = figure(title=f&quot;Input_2 = {value} fixed&quot;, \n                  x_range=filtered_data[&quot;Input_1&quot;].unique(), \n                  height=300,\n                  width=500\n                  )\n\n    plot.xaxis.axis_label = &quot;Input_1&quot;\n\n    plot.vbar_stack(stackers=[&quot;Output_1&quot;, &quot;Output_2&quot;, &quot;Output_3&quot;],\n                    x=&quot;Input_1&quot;,\n                    width=0.9,\n                    color=[&quot;orange&quot;, &quot;gray&quot;, &quot;brown&quot;],\n                    source=source,\n                    legend_label=[&quot;Output 1&quot;, &quot;Output 2&quot;, &quot;Output 3&quot;]\n                    )\n\n    plots_for_input_2.append(plot)\n\n\ngrid_for_input_1 = gridplot(plots_for_input_1, ncols=1)  \ngrid_for_input_2 = gridplot(plots_for_input_2, ncols=1)\n\nfinal_layout = row(grid_for_input_1, grid_for_input_2)\n\n\nshow(final_layout)\n\n</code></pre>\n<p><strong>Here are output example pictures to show how I aim to visualize the data:</strong></p>\n<p>bokeh example plot 1:</p>\n<p><img src=\"https://i.stack.imgur.com/oCfbX.png\" alt=\"bokeh example plot 1\" /></p>\n<p>bokeh example plot 2:</p>\n<p><img src=\"https://i.stack.imgur.com/N0Zq3.png\" alt=\"bokeh example plot 2\" /></p>\n<p>I was unable to find a dynamic approach that works for changing inputs and outputs, such as varying two inputs while keeping the others constant and visualizing the impacts on all outputs through stacked bar charts. Additionally, the approach should efficiently adapt to data updates without requiring manual code adjustments for each new scenario.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 23779212,
+        "reputation": 41,
+        "user_id": 17792148,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/AATXAJyFIEqbK4yvyZV4jbk-VwJsooL4vKc-HdbQJRTY=k-s256",
+        "display_name": "Rajesh Patel",
+        "link": "https://stackoverflow.com/users/17792148/rajesh-patel"
+      },
+      "is_answered": true,
+      "view_count": 48,
+      "answer_count": 2,
+      "score": 3,
+      "last_activity_date": 1709146435,
+      "creation_date": 1708985153,
+      "last_edit_date": 1709022532,
+      "question_id": 78064153,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/78064153/python-bokeh-xy-scatter-plot-and-color-mapping-using-palette",
+      "title": "Python Bokeh xy scatter plot and color mapping using palette",
+      "body": "<p>I have three list and I want plot a xy scatter plot in bokeh but color of plot points would depend on value of Y but scaled to value specfied in list 'z'. Note here that 'z' is of different size from x and y</p>\n<p>How could I do it?</p>\n<pre><code>`  x = list(range(1, 51)) # Data points\n  y = random.sample(range(0, 100), 50) # Temperature observed\n  z = list(range(0, 100)) color bar temp range.\n\n  source = ColumnDataSource('.....????..........')\n  cmap = linear_cmap(field_name='?', palette=&quot;Spectral6&quot;, low=?, high=?)\n\n  r = p.scatter(y, y, color=cmap, size=15, source=source)`\n</code></pre>\n<p>I tried following the example given on &quot;https://docs.bokeh.org/en/latest/docs/examples/basic/data/linear_cmap_colorbar.html&quot; but did not have any success.</p>\n"
+    },
+    {
+      "tags": [
+        "javascript",
+        "bokeh",
+        "bokehjs"
+      ],
+      "owner": {
+        "account_id": 28273027,
+        "reputation": 31,
+        "user_id": 21615916,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/AGNmyxYgH0E2rttD3T0PVANj8uqHY-U8v1pbGrxabKyD=k-s256",
+        "display_name": "Lou",
+        "link": "https://stackoverflow.com/users/21615916/lou"
+      },
+      "is_answered": false,
+      "view_count": 11,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1708942620,
+      "creation_date": 1708942620,
+      "question_id": 78060123,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/78060123/retrieving-html-element-linked-to-bokeh-js-object-from-bokeh-documents-in-javasc",
+      "title": "Retrieving HTML Element Linked to Bokeh JS Object from Bokeh.documents in JavaScript",
+      "body": "<h1>Question:</h1>\n<p>Is it possible to retrieve the HTML element linked to a Bokeh JS object from the Bokeh.documents? I would like to access the HTML button created with a Bokeh widget in Python in order to trigger a click event over it using JavaScript.</p>\n<h1>Details:</h1>\n<p>I'm working with Bokeh to create interactive visualizations in Python. I have created a Bokeh widget, specifically a button, which generates corresponding HTML elements when rendered in a web browser. Now, I want to manipulate this button using JavaScript, but I'm unsure how to access the HTML element that corresponds to the Bokeh JS object from the Bokeh.documents array in JavaScript.</p>\n<h1>Additional Context:</h1>\n<p>I have explored the Bokeh.documents array in the browser's console and can see the structure of the document, but I'm struggling to understand how to map the Bokeh JS object to its corresponding HTML element. Any guidance or code snippets demonstrating how to achieve this would be greatly appreciated.</p>\n<h1>Current Approach:</h1>\n<p>Here's what I've tried so far:</p>\n<pre><code>const bokehDocs = Bokeh.documents;\nconst myWidget = bokehDocs[0].get_model_by_name(&quot;myButtonWidget&quot;); // Example name of my button widget\n// Now, how can I get the corresponding HTML element linked to this Bokeh JS object (myWidget)?\n</code></pre>\n<h1>Expected Outcome:</h1>\n<p>I expect to be able to retrieve the HTML element linked to the Bokeh JS object, such as a button, so that I can manipulate it using JavaScript. This could involve triggering events like clicks or updating its properties dynamically.</p>\n<p>Any help or insights into how to achieve this would be greatly appreciated. Thank you in advance!</p>\n"
+    },
+    {
+      "tags": [
+        "hover",
+        "tooltip",
+        "bokeh",
+        "scatter-plot",
+        "runumap"
+      ],
+      "owner": {
+        "account_id": 22902439,
+        "reputation": 63,
+        "user_id": 17040989,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/d23b77d5870324eb9a8566261bd7f08e?s=256&d=identicon&r=PG",
+        "display_name": "Matteo",
+        "link": "https://stackoverflow.com/users/17040989/matteo"
+      },
+      "is_answered": true,
+      "view_count": 21,
+      "accepted_answer_id": 78065881,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1709020135,
+      "creation_date": 1708938887,
+      "last_edit_date": 1709018867,
+      "question_id": 78059770,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/78059770/bokeh-hovertool-and-tooltips-not-working-correctly",
+      "title": "bokeh HoverTool and tooltips not working correctly",
+      "body": "<p>Hi there I just got the plot I wanted with some help and tweaks here and there using <code>bokeh</code>; however, I can't figure out how to add information of interest to my tooltips navigation/hover tool.</p>\n<p>Specifically this is what my <code>df</code> looks like:<a href=\"https://i.stack.imgur.com/jaRPz.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/jaRPz.png\" alt=\"enter image description here\" /></a></p>\n<p>with <code>ID</code> as <em>df.index</em>, which is the exact information I want to show when hovering (among others) since it helps to understand what sample we are looking at.</p>\n<p>That said,this is the code I'm using with relevant libraries/packages:</p>\n<pre class=\"lang-py prettyprint-override\"><code>import numpy as np\nimport pandas as pd\nimport plotly.express as px\nimport bokeh.plotting as bp\n\nfrom bokeh.models import CategoricalColorMapper, Legend, HoverTool\nfrom bokeh.plotting im\n\n\nTOOLS=&quot;hover,crosshair,pan,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select,poly_select,lasso_select,examine,help&quot;\n\ndf = pd.DataFrame({\n    'name': df.index,\n    'UMAP1': df['UMAP1'],\n    'UMAP2': df['UMAP2'],\n    'population': df['population'],\n    'color': df['color'],\n})\n\n#individual_id = bp.ColumnDataSource(df)\n#hover_name = HoverTool(\n    #tooltips=[('ID', '@name')])\n\nfig = figure(tools=TOOLS, x_axis_label='UMAP1', y_axis_label='UMAP2')\nlegend = Legend(orientation='horizontal', title='metapopulations')\nfig.add_layout(legend, 'below')\n#fig.add_tools(hover_name)\n\n\ngrouper = df.groupby('population')\nfor label, g in grouper:\n    fig.scatter(g['UMAP1'], g['UMAP2'], color=g['color'], legend_label=label, fill_alpha=0.6)\n\n#hover = fig.select(dict(type=HoverTool))\n#hover.tooltips = [('Name', '@name')]\n\nshow(fig)\n</code></pre>\n<p>As you can see I tried some options but all of them returned <code>???</code> instead of the sample's ID... also, for some reason, in this specific context the <code>ColumnDataSource</code>, when used, returns an error. If anyone has any idea how to link samples' ID to data points in the UMAP, it will be greatly appreciated. Thanks!</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "legend",
+        "bokeh",
+        "legend-properties",
+        "runumap"
+      ],
+      "owner": {
+        "account_id": 22902439,
+        "reputation": 63,
+        "user_id": 17040989,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/d23b77d5870324eb9a8566261bd7f08e?s=256&d=identicon&r=PG",
+        "display_name": "Matteo",
+        "link": "https://stackoverflow.com/users/17040989/matteo"
+      },
+      "is_answered": true,
+      "view_count": 33,
+      "accepted_answer_id": 78040121,
+      "answer_count": 2,
+      "score": 0,
+      "last_activity_date": 1708639060,
+      "creation_date": 1708458234,
+      "last_edit_date": 1708509377,
+      "question_id": 78029940,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/78029940/legend-in-bokeh-umap-shows-only-one-entry",
+      "title": "legend in bokeh UMAP shows only one entry",
+      "body": "<p>Hi there I just managed to get this plot done in <code>bokeh</code>, so I imagine there are many things that could be improved. Nonetheless, what bothers me the most is that I cannot figure out how to have all entries for my eight populations in the UMAP plot...<br />\nRight now it shows only one entry which I don't know if it's associated to the correct population, and I manipulate with <code>legend_lable</code>.</p>\n<p>What I actually want to show is a legend with all eight populations (EUR, SIB, AFR, SAS, CEA, OCE, MENA and AME) and their associated colors. <em>See</em> below for the code I used and and example for the plot. Any help is appreciated!</p>\n<pre><code>import numpy as np\nimport pandas as pd\nimport plotly.express as px\nimport bokeh.plotting as bp\n\nfrom bokeh.plotting import ColumnDataSource, figure, show\nfrom umap import UMAP\n\n\numap = pd.read_csv(&quot;SGDP_download/SGDP_bi_snps_norm-2.eigenvec&quot;, sep=&quot;\\t&quot;)\numap.rename(columns={&quot;#IID&quot;: &quot;#ID&quot;}, inplace=True)\n\nloc = pd.read_csv(&quot;SGDP_download/pca_loc_fix_python-order.txt&quot;)\ncolors = pd.read_csv(&quot;SGDP_download/bokeh_colors.txt&quot;)\n\neigenval = pd.read_csv(&quot;SGDP_download/SGDP_bi_snps_norm-2.eigenval&quot;, header=None)\npve = round(eigenval / (eigenval.sum(axis=0))*100, 2)\npve.head()\n\n\numap.sort_values('#ID', inplace=True)\numap.insert(loc=1, column='#LOC', value=loc)\numap.rename(columns={'#ID': 'ID', '#LOC': 'LOC'}, inplace=True)\n\n\nregions_umap = umap.iloc[:, 2:12]\n\numap_plot = UMAP(n_components=2, init=&quot;random&quot;, random_state=15)\numap_proj = umap_plot.fit_transform(regions_umap)\n#umap_proj.view()\n#umap_proj.shape\n\ndf = pd.DataFrame(umap_proj, columns=['UMAP1', 'UMAP2'])\ndf.insert(loc=0, column='population', value=loc)\ndf.insert(loc=1, column='color', value=colors)\ndf.index = umap[&quot;ID&quot;]\n\nsource=ColumnDataSource(df)\n#source\ndf\n\n\nTOOLS=&quot;hover,crosshair,pan,wheel_zoom,zoom_in,zoom_out,box_zoom,undo,redo,reset,tap,save,box_select,poly_select,lasso_select,examine,help&quot;\n\nfig = figure(tools=TOOLS, x_axis_label='UMAP1', y_axis_label='UMAP2')\nfig.scatter(x=df['UMAP1'], y=df['UMAP2'], color=df['color'], size=5, legend_label='population',\n            fill_alpha=0.6, line_color=None)\n\nfig.legend.location = &quot;top_left&quot;\nfig.legend.title = &quot;metapopulations&quot;\n\nshow(fig)\n</code></pre>\n<p><a href=\"https://i.stack.imgur.com/kUtB1.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/kUtB1.png\" alt=\"enter image description here\" /></a></p>\n<p>P.S. as a side note it is possible to have the legend at the bottom of the plot with the legend title centered?</p>\n<p><strong>EDIT</strong> this is what the df looks like @droumis</p>\n<p><a href=\"https://i.stack.imgur.com/wqrF9.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/wqrF9.png\" alt=\"enter image description here\" /></a></p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "runumap"
+      ],
+      "owner": {
+        "account_id": 22902439,
+        "reputation": 63,
+        "user_id": 17040989,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/d23b77d5870324eb9a8566261bd7f08e?s=256&d=identicon&r=PG",
+        "display_name": "Matteo",
+        "link": "https://stackoverflow.com/users/17040989/matteo"
+      },
+      "is_answered": false,
+      "view_count": 32,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1708377905,
+      "creation_date": 1708365217,
+      "last_edit_date": 1708377905,
+      "question_id": 78022654,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/78022654/how-to-plot-in-bokeh",
+      "title": "how to plot in bokeh",
+      "body": "<p>Hi there I'm quite new to Python plotting in general but somehow I can get the gist of things from examples; however, I couldn't find anything useful/helpful to understand how to use <code>bokeh</code> to plot a UMAP.</p>\n<p>After experimenting with some tutorial all I get is a single dot, whereas I should have a UMAP based on the NumPy array I'm using. <em>See</em> below for an example</p>\n<p><strong>umap_proj</strong></p>\n<pre><code>array([[  9.467572  ,   1.3644829 ],\n       [  9.608901  ,   1.2682369 ],\n       [  0.2737476 ,   6.213452  ],\n       [  3.2541463 ,  10.000814  ],\n       [ 23.634834  ,   3.198842  ],\n       [ 23.586329  ,   3.2471323 ],\n       [  3.6388707 ,   5.290971  ],\n       [  0.07268663,   5.7849684 ],\n       [  0.20859158,   5.7292304 ],\n       [  0.84385896,   5.0269856 ],\n       [ 11.656524  ,  15.852114  ],\n       [ 11.690001  ,  15.9092865 ],\n       [  4.307997  ,   9.4132395 ],\n       [  4.315025  ,   9.4042425 ],\n       [  4.57423   ,  12.418981  ],\n       [  4.3381214 ,  13.442026  ],\n       [  9.221395  ,   0.99569064],\n       [  9.417851  ,   1.2935886 ],\n       [  4.0001864 ,  14.564397  ],\n       [  9.4523325 ,   2.5142562 ],\n       [  0.18032   ,   5.607879  ],\n       [  0.20974386,   5.5906544 ],\n       [  8.327373  , -13.634082  ],\n       [  4.436351  ,  14.6661625 ],\n       [  4.439193  ,  14.614582  ],\n...\n       [  8.337706  , -13.553178  ],\n       [  4.1751633 ,   5.5536766 ],\n       [  4.110508  ,   5.5729456 ],\n       [ 14.518264  ,   7.623279  ],\n       [  9.572984  , -13.1281595 ]], dtype=float32)\n</code></pre>\n<p>This is how my array looks like, but I really cannot figure out how to specify to Python to use it for plotting using the <code>figure</code> and <code>circles</code> functions of <code>bokeh</code>. Here the libraries I'm importing:</p>\n<p><strong>EDIT TO SHOW ALL COMMANDS</strong></p>\n<pre><code>import numpy as np\nimport pandas as pd\nimport plotly.express as px\nimport bokeh.plotting as bp\n\nfrom bokeh.plotting import figure, show\nfrom umap import UMAP\n\numap = pd.read_csv(&quot;SGDP_bi_snps_norm-2.eigenvec&quot;, sep=&quot;\\t&quot;)\numap.rename(columns={&quot;#IID&quot;: &quot;#ID&quot;}, inplace=True)\n\nloc = pd.read_csv(&quot;loc_fix_python-order.txt&quot;)\n\neigenval = pd.read_csv(&quot;SGDP_bi_snps_norm-2.eigenval&quot;, header=None)\npve = round(eigenval / (eigenval.sum(axis=0))*100, 2)\npve.head()\n\numap.sort_values('#ID', inplace=True)\numap.insert(loc=1, column='#LOC', value=loc)\numap.rename(columns={'#ID': 'ID', '#LOC': 'LOC'}, inplace=True)\n\nregions_umap = umap.iloc[:, 2:12]\n\numap_plot = UMAP(n_components=2, init=&quot;random&quot;, random_state=15)\numap_proj = umap_plot.fit_transform(regions_umap)\numap_proj.view()\n\nfig = figure(title='SGDP UMAP')\nfig.circle(umap_proj[1], umap_proj[2])\n</code></pre>\n<p>Any input on how to start is much appreciated, and sorry for the basic question but I cannot figure it out!</p>\n<p>P.S. in <code>plotly</code> works just fine</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "pandas",
+        "time-series",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 14470543,
+        "reputation": 1855,
+        "user_id": 10452700,
+        "user_type": "registered",
+        "profile_image": "https://graph.facebook.com/2172245999723325/picture?type=large",
+        "display_name": "Mario",
+        "link": "https://stackoverflow.com/users/10452700/mario"
+      },
+      "is_answered": true,
+      "view_count": 292,
+      "answer_count": 2,
+      "score": 0,
+      "last_activity_date": 1708888009,
+      "creation_date": 1707918060,
+      "last_edit_date": 1708888009,
+      "question_id": 77994714,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77994714/how-can-retrieve-numbers-of-records-above-and-under-mean-median-over-time-data-w",
+      "title": "How can retrieve numbers of records above and under mean\\median over time data with respect to time resolution in python?",
+      "body": "<p>Let's say I have the following time <a href=\"https://github.com/amcs1729/Predicting-cloud-CPU-usage-on-Azure-data/blob/master/azure.csv\" rel=\"nofollow noreferrer\">data</a> for 1 month or (31 days) in January:</p>\n<pre class=\"lang-py prettyprint-override\"><code>import os, holoviews as hv\nos.environ['HV_DOC_HTML'] = 'true'\nhv.extension('bokeh')\n\nimport pandas as pd\nimport pandas_bokeh\nfrom pandas_bokeh import plot_bokeh\npandas_bokeh.output_notebook()\n\n#-----------------------------------------------------------\n# Libs\n#-----------------------------------------------------------\n#!pip install hvplot\n#!pip install pandas-bokeh\n\n#-----------------------------------------------------------\n# LOAD THE DATASET\n#-----------------------------------------------------------\n\ndf = pd.read_csv('azure.csv')\ndf['timestamp'] =  pd.to_datetime(df['timestamp'])\ndf = df.rename(columns={'min cpu': 'min_cpu',\n                        'max cpu': 'max_cpu',\n                        'avg cpu': 'avg_cpu',})\n#df = df.set_index('timestamp')\ndf.head()\n\n\n# Data preparation\n# ==============================================================================\nsliced_df = df[['timestamp', 'avg_cpu']]\n# convert column to datetime object\n#sliced_df['timestamp'] = pd.to_datetime(sliced_df['timestamp'], format='%Y-%m-%d %H:%M:%S')\n\n# get the hour, day month\nsliced_df['hour']        = sliced_df['timestamp'].dt.hour\nsliced_df['day']         = sliced_df['timestamp'].dt.day\nsliced_df['month']       = sliced_df['timestamp'].dt.month\nsliced_df['year']        = sliced_df['timestamp'].dt.year\n\nyear_input=2017\nmonth_input=1\nday_input=21\n\n# Retrive average CPU usage for hourly\ndf_avg = sliced_df.groupby('hour').agg({'avg_cpu': 'mean'}).reset_index()\ndf_21  = sliced_df[(sliced_df.year == year_input) &amp; (sliced_df.month == month_input) &amp; (sliced_df.day == day_input)]\n\n\ndf_21 = df_21.groupby('hour').agg({'avg_cpu': 'max'}).reset_index()\n\ndf_above = pd.merge(df_21, df_avg, on='hour', suffixes=('_hour','_avg'))\ndf_above['above']       = df_above.loc[df_above[f&quot;avg_cpu_hour&quot;] &gt;= df_above[&quot;avg_cpu_avg&quot;], f&quot;avg_cpu_hour&quot;]\ndf_above['above_value'] = df_above['avg_cpu_hour'] - df_above['avg_cpu_avg']\n\ndf_below = pd.merge(df_21, df_avg, on='hour', suffixes=('_hour','_avg'))\ndf_below['below']       = df_below.loc[df_below[f&quot;avg_cpu_hour&quot;] &lt; df_below[&quot;avg_cpu_avg&quot;], f&quot;avg_cpu_hour&quot;]\ndf_below['below_value'] = df_below['avg_cpu_hour'] - df_below['avg_cpu_avg']\n\n\nabove_count = df_above['above'].value_counts().sum()\nbelow_count = df_below['below'].value_counts().sum()\n\n\ndark_red = &quot;#FF5555&quot;\ndark_blue = &quot;#5588FF&quot;\n\n\nplot      = sliced_df.hvplot(     x=&quot;hour&quot;,       y=&quot;avg_cpu&quot;, by=&quot;day&quot;,  color=&quot;grey&quot;, alpha=0.02, legend=False, hover=False)\nplot_avg  =    df_avg.hvplot(     x=&quot;hour&quot;,       y=&quot;avg_cpu&quot;,             color=&quot;grey&quot;,             legend=False)\nplot_21th =    df_21.hvplot(      x=&quot;hour&quot;,       y=&quot;avg_cpu&quot;,             color=&quot;black&quot;,            legend=False)\n\nplot_above = df_above.hvplot.area(x=&quot;hour&quot;, y=&quot;avg_cpu_avg&quot;, y2=&quot;avg_cpu_hour&quot;).opts(fill_alpha=0.2, line_alpha=0.8, line_color=dark_red, fill_color=dark_red)\nplot_below = df_below.hvplot.area(x=&quot;hour&quot;, y=&quot;avg_cpu_avg&quot;, y2=&quot;avg_cpu_hour&quot;).opts(fill_alpha=0.2, line_alpha=0.8, line_color=dark_blue, fill_color=dark_blue)\n\ntext_days_above = hv.Text(5, df_21[&quot;avg_cpu&quot;].max(), f&quot;{above_count}&quot;, fontsize=14).opts(text_align=&quot;right&quot;, text_baseline=&quot;bottom&quot;, text_color=dark_red, text_alpha=0.8)\ntext_days_below = hv.Text(5, df_21[&quot;avg_cpu&quot;].max(), f&quot;{below_count}&quot;, fontsize=14).opts(text_align=&quot;right&quot;, text_baseline=&quot;top&quot;, text_color=dark_blue, text_alpha=0.8)\n\ntext_above      = hv.Text(5, df_21[&quot;avg_cpu&quot;].max(), &quot;DAYS ABOVE&quot;, fontsize=7).opts(text_align=&quot;left&quot;, text_baseline=&quot;bottom&quot;, text_color=&quot;lightgrey&quot;, text_alpha=0.8)\ntext_below      = hv.Text(5, df_21[&quot;avg_cpu&quot;].max(), &quot;DAYS BELOW&quot;, fontsize=7).opts(text_align=&quot;left&quot;, text_baseline=&quot;above&quot;, text_color=&quot;lightgrey&quot;, text_alpha=0.8)\n\nhv.renderer(&quot;bokeh&quot;).theme = theme\n\nfinal = (\n    plot\n    * plot_21th\n    * plot_avg\n    * plot_above\n    * plot_below\n    * text_days_above\n    * text_days_below\n    * text_above\n    * text_below\n).opts(\n    xlabel=&quot;hourly&quot;,\n    ylabel=&quot;CPU [Hz]&quot;,\n    title=f&quot;{day_input}th Jan data vs AVERAGE&quot;,\n    gridstyle={&quot;ygrid_line_alpha&quot;: 0},\n    xticks=[\n        (0, &quot;00:00&quot;),\n        (1, &quot;01:00&quot;),\n        (2, &quot;02:00&quot;),\n        (3, &quot;03:00&quot;),\n        (4, &quot;04:00&quot;),\n        (5, &quot;05:00&quot;),\n        (6, &quot;06:00&quot;),\n        (7, &quot;07:00&quot;),\n        (8, &quot;08:00&quot;),\n        (9, &quot;09:00&quot;),\n        (10, &quot;10:00&quot;),\n        (11, &quot;11:00&quot;),\n        (12, &quot;12:00&quot;),\n        (13, &quot;13:00&quot;),\n        (14, &quot;14:00&quot;),\n        (15, &quot;15:00&quot;),\n        (16, &quot;16:00&quot;),\n        (17, &quot;17:00&quot;),\n        (18, &quot;18:00&quot;),\n        (19, &quot;19:00&quot;),\n        (20, &quot;20:00&quot;),\n        (21, &quot;21:00&quot;),\n        (22, &quot;22:00&quot;),\n        (23, &quot;23:00&quot;),\n    ],\n    xrotation=45,\n    show_grid=True,\n    fontscale=1.18,\n)\nhv.save(final, &quot;final.html&quot;)\n\nfinal\n</code></pre>\n<hr />\n<p>Update II:</p>\n<p>I have tried the following code unsuccessfully inspired by the answer of @chitown88 using <a href=\"/questions/tagged/bokeh\" class=\"post-tag\" title=\"show questions tagged &#39;bokeh&#39;\" aria-label=\"show questions tagged &#39;bokeh&#39;\" rel=\"tag\" aria-labelledby=\"tag-bokeh-tooltip-container\">bokeh</a> instead of <a href=\"/questions/tagged/seaborn\" class=\"post-tag\" title=\"show questions tagged &#39;seaborn&#39;\" aria-label=\"show questions tagged &#39;seaborn&#39;\" rel=\"tag\" aria-labelledby=\"tag-seaborn-tooltip-container\">seaborn</a> package to get the desired output for <em>output1</em> at least.\nMy current output:\n<img src=\"https://i.imgur.com/G0B5u1t.png\" alt=\"img\" /></p>\n<hr />\n<p>Example output for years:\n<img src=\"https://i.imgur.com/9v7fIs3.png\" alt=\"img\" /></p>\n<p>As seen in the above example, I want to retrieve, reflect, and visualize my data in <strong>smaller time resolution (hourly\\daily\\monthly)</strong> rather than annually. I need to retrieve the number of CPU usage of column <code>avg cpu</code> within dataframe observations that exceeding\\below:</p>\n<ul>\n<li>Output1:</li>\n</ul>\n<blockquote>\n<p>the <strong>hourly</strong> average for one certain day ( i.e., 21st Jan. 2024-01-21 00:00:00 till 2024-01-22 00:00:00)</p>\n<ul>\n<li>x-axis: hourly timestamp of records for 21 Jan</li>\n<li>y-axis: 'avg CPU' usage for 21 Jan</li>\n<li>Threshold line: average CPU usage for 21 Jan</li>\n</ul>\n</blockquote>\n<ul>\n<li>Output2:</li>\n</ul>\n<blockquote>\n<p>The <strong>daily</strong> average for Jan.</p>\n<ul>\n<li>x-axis: daily timestamp of Jan (1th-31th)</li>\n<li>y-axis: 'avg CPU' usage for Jan</li>\n<li>Threshold line: average CPU usage for Jan month</li>\n</ul>\n</blockquote>\n<p>What is the elegant way to treat my dataframe to achieve this and the find threshold for interested <em>outpu1</em> and <em>output2</em> accordingly?</p>\n<p><img src=\"https://i.imgur.com/c9Icu2L.png\" alt=\"img\" /></p>\n"
+    },
+    {
+      "tags": [
+        "pdf",
+        "svg",
+        "google-colaboratory",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 14335067,
+        "reputation": 732,
+        "user_id": 10354810,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/hYkOc.jpg?s=256&g=1",
+        "display_name": "Jaja",
+        "link": "https://stackoverflow.com/users/10354810/jaja"
+      },
+      "is_answered": true,
+      "view_count": 71,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1707752684,
+      "creation_date": 1707423989,
+      "question_id": 77964596,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77964596/how-to-export-svg-or-pdf-from-bokeh-plot-in-google-colab",
+      "title": "How to export svg or pdf from bokeh plot in google colab?",
+      "body": "<p>Goal is to save svg-figure with bokeh in google colab.</p>\n<p>I followend the docs at <a href=\"https://colab.research.google.com/github/bebi103a/bebi103a.github.io/blob/master/lessons/06/intro_to_plotting_with_bokeh.ipynb\" rel=\"nofollow noreferrer\">https://colab.research.google.com/github/bebi103a/bebi103a.github.io/blob/master/lessons/06/intro_to_plotting_with_bokeh.ipynb</a></p>\n<p>Result: RuntimeError, s. details below</p>\n<pre><code>p = bokeh.plotting.figure(\n    width=400,\n    height=300,\n    x_axis_label=&quot;confidence when correct&quot;,\n    y_axis_label=&quot;confidence when incorrect&quot;,\n)\np.circle(\n    source=df, \n    x=&quot;confidence when correct&quot;, \n    y=&quot;confidence when incorrect&quot;\n)\n\np.output_backend = &quot;svg&quot;\nbokeh.io.export_svgs(p, filename=&quot;insomniac_confidence_correct.svg&quot;)\n\n\nThen there is an error:\nRuntimeError: To use bokeh.io image export functions you need selenium ('conda install selenium' or 'pip install selenium')\n</code></pre>\n"
+    },
+    {
+      "tags": [
+        "pandas",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 30373450,
+        "reputation": 29,
+        "user_id": 23276500,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/04c15a9ceaa8da7a42f6c03c7bd413fb?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "unleasehed",
+        "link": "https://stackoverflow.com/users/23276500/unleasehed"
+      },
+      "is_answered": false,
+      "view_count": 30,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1707468882,
+      "creation_date": 1707404445,
+      "last_edit_date": 1707468882,
+      "question_id": 77962670,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77962670/how-do-i-create-multiple-lines-in-a-line-chart",
+      "title": "How do I create multiple lines in a line chart?",
+      "body": "<p>I would like to plot 3 line charts (1 for each category) against the year.\nI name the y-axis based on the row names in the data set but it is incorrect. How should I define the naming to pull the data from the dataset?</p>\n<pre><code>from bokeh.plotting import figure\nfrom bokeh.io import output_file, output_notebook, show\nfrom bokeh.layouts import column\nfrom bokeh.models import HoverTool, ColumnDataSource\n\ndata = pd.read_csv('saving.csv',dtype={'year': object})\ndata.head()\n\ndata['financial_year']=pd.to_datetime(data['financial_year'])\n\np.line(x= data.financial_year, y = data.rent)\np.line(x= data.financial_year, y = data.entertainment)\n\nshow(p)\n\n# create a new plot with a title and axis labels\np = figure(title=&quot;Monthly expenditure&quot;, x_axis_type='datetime', x_axis_label=&quot;financial year&quot;, y_axis_label=&quot;expenses&quot;)\n\n# add a line renderer with legend and line thickness\np.line(x, y, legend_label=&quot;expenses&quot;, line_width=2)\n\n# Plot date along the x axis and price along the y axis\np.line(data['financial_year'], data['rent'], line_color='green')\np.line(data['financial_year'], data['entertainment'], line_color='blue')\n\n# show the results\nshow(p)\n</code></pre>\n<p><a href=\"https://i.stack.imgur.com/TnyXE.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/TnyXE.png\" alt=\"data set\" /></a></p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "google-chrome",
+        "flask",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 260388,
+        "reputation": 2326,
+        "user_id": 543913,
+        "user_type": "registered",
+        "accept_rate": 66,
+        "profile_image": "https://www.gravatar.com/avatar/a7d76a4187acf1918902f0a2ab239aba?s=256&d=identicon&r=PG",
+        "display_name": "dshin",
+        "link": "https://stackoverflow.com/users/543913/dshin"
+      },
+      "is_answered": true,
+      "view_count": 82,
+      "accepted_answer_id": 77971511,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1707681558,
+      "creation_date": 1707333431,
+      "last_edit_date": 1707681558,
+      "question_id": 77957365,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77957365/embedding-bokeh-server-into-flask-app-while-retaining-plot-size",
+      "title": "Embedding Bokeh server into Flask app while retaining plot size",
+      "body": "<p>I found an example in the Bokeh github of a Flask app that embeds a Bokeh server <a href=\"https://github.com/bokeh/bokeh/blob/branch-3.4/examples/server/api/flask_embed.py\" rel=\"nofollow noreferrer\">here</a>. When I run it and open the Flask URL in Google Chrome, I see the embedded plot. When I directly open the Bokeh URL in my Google Chrome, I also see the plot. However, the two plots are of different size. Below are two screenshots of the same size that illustrate this.</p>\n<p>The first one is the direct Bokeh plot, and represents the correct size. The second one is the embedded plot and is too small. <strong>How do I fix the example so that the embedded plot size matches the standalone plot size?</strong></p>\n<p>I should note that in Firefox, the plots appear to be the same size.</p>\n<p><a href=\"https://i.stack.imgur.com/5PuxQ.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/5PuxQ.png\" alt=\"Standalone Bokeh\" /></a>\n<a href=\"https://i.stack.imgur.com/g6llQ.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/g6llQ.png\" alt=\"Embedded Bokeh\" /></a></p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "html",
+        "css",
+        "bokeh",
+        "scatter-plot"
+      ],
+      "owner": {
+        "account_id": 10179144,
+        "reputation": 320,
+        "user_id": 7516661,
+        "user_type": "registered",
+        "accept_rate": 56,
+        "profile_image": "https://www.gravatar.com/avatar/1198db7942e89f4ae634c65dd2935486?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Xhoan",
+        "link": "https://stackoverflow.com/users/7516661/xhoan"
+      },
+      "is_answered": false,
+      "view_count": 52,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1707157060,
+      "creation_date": 1707157060,
+      "question_id": 77943162,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77943162/python-bokeh-hovertool-styling-cant-hide-the-margin-in-any-way",
+      "title": "Python Bokeh HoverTool styling, can&#39;t hide the margin in any way",
+      "body": "<p>I'm making a scatter plot with bokeh and want to have a custom hover show in the data points. However, I'm having difficulties with the styling because I can't manage to get rid of a white margin that always shows in the hover area.</p>\n<p>My code:</p>\n<pre><code>import numpy as np\nimport bokeh.plotting as bp\nfrom bokeh.io import curdoc\n\n# dark theme\ncurdoc().theme = 'dark_minimal'\n\n# random data\nN = 250\ndata = pd.DataFrame(\n    {\n        'x': np.random.randint(0, 100, N),\n        'y': np.random.randint(0, 100, N),\n        'z': np.random.randint(0, 100, N),\n        't': [np.random.choice(['A','B','C','D','E']) for i in range(N)],\n    }\n)\n\n# According to the documentation, this is how you do a custom hover\nTOOLTIPS = &quot;&quot;&quot;\n    &lt;div style=&quot;color: #ffffff; font-size: 12px; background-color: #121111; margin: 0px 0px 0px 0px;&quot;&gt;\n        &lt;div&gt;\n            &lt;span style=&quot;font-size: 16px; font-weight: bold;&quot;&gt;Legend Title&lt;/span&gt;\n        &lt;/div&gt;\n        &lt;div&gt;\n            &lt;span style=&quot;font-weight: bold;&quot;&gt;Trace:&lt;/span&gt;\n            &lt;span&gt;@t&lt;/span&gt;\n        &lt;/div&gt;\n        &lt;div&gt;\n            &lt;span style=&quot;font-weight: bold;&quot;&gt;X:&lt;/span&gt;\n            &lt;span&gt;@x&lt;/span&gt;\n        &lt;/div&gt;\n        &lt;div&gt;\n            &lt;span style=&quot;font-weight: bold;&quot;&gt;Y:&lt;/span&gt;\n            &lt;span&gt;@y&lt;/span&gt;\n        &lt;/div&gt;\n        &lt;div&gt;\n            &lt;span style=&quot;font-weight: bold;&quot;&gt;Z:&lt;/span&gt;\n            &lt;span&gt;@z&lt;/span&gt;\n        &lt;/div&gt;\n    &lt;/div&gt;\n&quot;&quot;&quot;\nTOOLS = &quot;hover,box_zoom,reset&quot;\np = bp.figure(height=750, width=1500, tools=TOOLS, tooltips=TOOLTIPS)\n\ncolors = {'A':'blue','B':'red','C':'green','D':'yellow','E':'cyan'}\n\n# Plotting group by group because I need the legend to be interactive\nfor t,g in data.groupby('t'):\n    \n    # Add trace\n    p.scatter(source=g, \n              x='x', y='y', \n              size='z', \n              fill_color=colors[t], \n              line_width=0, \n              legend_group='t', \n              fill_alpha=0.75)\n\np.legend.click_policy = 'hide'\n</code></pre>\n<p>Gives this plot:\n<a href=\"https://i.stack.imgur.com/VaAAO.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/VaAAO.png\" alt=\"enter image description here\" /></a></p>\n<p>The problem can be seen very clearly, the white margin in the hover area just doesn't go away, I've tried changing the color or setting the size of the margin to 0, but it always shows no matter what.</p>\n<p>Would be very helpful if somebody knows how to solve this styling detail.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "next.js",
+        "bokeh",
+        "bokehjs"
+      ],
+      "owner": {
+        "account_id": 16072936,
+        "reputation": 3,
+        "user_id": 11975418,
+        "user_type": "registered",
+        "profile_image": "https://lh4.googleusercontent.com/-CzqHVBcTlVA/AAAAAAAAAAI/AAAAAAAAFAA/LHubr9gMACI/photo.jpg?sz=256",
+        "display_name": "Felipe Mastromauro Corr&#234;a",
+        "link": "https://stackoverflow.com/users/11975418/felipe-mastromauro-corr%c3%aaa"
+      },
+      "is_answered": false,
+      "view_count": 76,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1706789788,
+      "creation_date": 1706789788,
+      "question_id": 77920111,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77920111/how-can-i-embed-a-bokeh-plot-on-a-next-js-application-with-a-bokeh-server-by-usi",
+      "title": "How can I embed a Bokeh plot on a Next.js application with a Bokeh server by using add_document_from_session from BokehJS?",
+      "body": "<p>I have a Bokeh Server written on Python which also runs a Flask instance for testing (as per <a href=\"https://github.com/bokeh/bokeh/blob/3.3.4/examples/server/api/flask_embed.py\" rel=\"nofollow noreferrer\">this example</a> provided by Bokeh). This server provides a plot that I want to embed on a Next.js application in order to correctly enforce the architecture from the image linked below.</p>\n<p><a href=\"https://docs.bokeh.org/en/latest/_images/bokeh_serve.svg\" rel=\"nofollow noreferrer\">Image 1 - Data visualization app architecture</a></p>\n<p>However, I am falling short.</p>\n<p>Having used a Bokeh Server, I managed to embed it on the Flask instance (since the architecture is provided in the example), but I cannot understand how to utilize the functions provided in the <a href=\"https://docs.bokeh.org/en/latest/docs/user_guide/advanced/bokehjs.html\" rel=\"nofollow noreferrer\">BokehJS</a> library to embed the returns.</p>\n<p>The code for the server is similar as shown below. As per minimal example, I shall represent the code for <a href=\"https://github.com/bokeh/bokeh/blob/3.3.4/examples/server/api/flask_embed.py\" rel=\"nofollow noreferrer\">this example</a>.</p>\n<pre><code>from threading import Thread\n\nfrom flask import Flask, render_template\nfrom tornado.ioloop import IOLoop\n\nfrom bokeh.embed import server_document\nfrom bokeh.layouts import column\nfrom bokeh.models import ColumnDataSource, Slider\nfrom bokeh.plotting import figure\nfrom bokeh.sampledata.sea_surface_temperature import sea_surface_temperature\nfrom bokeh.server.server import Server\nfrom bokeh.themes import Theme\n\napp = Flask(__name__)\n\n\ndef bkapp(doc):\n    df = sea_surface_temperature.copy()\n    source = ColumnDataSource(data=df)\n\n    plot = figure(x_axis_type='datetime', y_range=(0, 25), y_axis_label='Temperature (Celsius)',\n                  title=&quot;Sea Surface Temperature at 43.18, -70.43&quot;)\n    plot.line('time', 'temperature', source=source)\n\n    def callback(attr, old, new):\n        if new == 0:\n            data = df\n        else:\n            data = df.rolling(f&quot;{new}D&quot;).mean()\n        source.data = ColumnDataSource.from_df(data)\n\n    slider = Slider(start=0, end=30, value=0, step=1, title=&quot;Smoothing by N Days&quot;)\n    slider.on_change('value', callback)\n\n    doc.add_root(column(slider, plot))\n\n    doc.theme = Theme(filename=&quot;theme.yaml&quot;)\n\n\n@app.route('/', methods=['GET'])\ndef bkapp_page():\n    script = server_document('http://localhost:5006/bkapp')\n    return render_template(&quot;embed.html&quot;, script=script, template=&quot;Flask&quot;)\n\n\ndef bk_worker():\n    # Can't pass num_procs &gt; 1 in this configuration. If you need to run multiple\n    # processes, see e.g. flask_gunicorn_embed.py\n    server = Server({'/bkapp': bkapp}, io_loop=IOLoop(), allow_websocket_origin=[&quot;localhost:8000&quot;])\n    server.start()\n    server.io_loop.start()\n\nThread(target=bk_worker).start()\n\nif __name__ == '__main__':\n    print('Opening single process Flask app with embedded Bokeh application on http://localhost:8000/')\n    print()\n    print('Multiple connections may block the Bokeh app in this configuration!')\n    print('See &quot;flask_gunicorn_embed.py&quot; for one way to run multi-process')\n    app.run(port=8000)\n</code></pre>\n<p>Afterwards, I have a Next.js component that shall be used as a way to embed the plot served by the Bokeh server (running on <a href=\"http://localhost:5006\" rel=\"nofollow noreferrer\">http://localhost:5006</a>). I have found the function <strong>add_document_from_session</strong> inside the modules provided with BokehJS, but I can't figure out a way to properly use it as I could not find accurate documentation for it (and for the fact that I am a JavaScript rookie).</p>\n<p>Component code shown below (using Tailwind CSS).</p>\n<pre><code>&quot;use client&quot;\n\nimport React, { useEffect } from &quot;react&quot;;\nimport * as Bokeh from '@bokeh/bokehjs';\n\n\nexport default function BokehPy(){\n    useEffect(() =&gt;{\n        \n    });\n    return(\n        &lt;&gt;\n            &lt;div className=&quot;flex flex-col&quot;&gt;\n                &lt;h2 className=&quot;prose lg:prose-xl&quot;&gt; Plot goes here&lt;/h2&gt;\n                &lt;div id=&quot;graph&quot;&gt;&lt;/div&gt;\n            &lt;/div&gt;\n            &lt;button \n                className=&quot;bg-white hover:bg-gray-100 text-gray-800 font-semibold \n                py-2 px-4 border border-gray-400 rounded shadow&quot;&gt;\n                    Editar\n            &lt;/button&gt;\n        &lt;/&gt;\n    );\n}\n</code></pre>\n<p>UseEffect is blank because I expect to be using it in the solution.\nHow would I go about embedding the plot correctly? Making a GET request to the server returns an HTML document with the plot. I assume the <strong>add_document_from_session</strong> function is necessary, but I do not know how I would use it in this scenario.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 25810912,
+        "reputation": 157,
+        "user_id": 19551721,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/9b1b0ab313612189725be34df9414582?s=256&d=identicon&r=PG",
+        "display_name": "Lisa",
+        "link": "https://stackoverflow.com/users/19551721/lisa"
+      },
+      "is_answered": false,
+      "view_count": 42,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1706623956,
+      "creation_date": 1706623956,
+      "question_id": 77907004,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77907004/xlsx-export-example-for-bokeh-data-table",
+      "title": "XLSX Export Example for bokeh data table",
+      "body": "<p>I am trying to export my interactive bokeh data table to an xlsx excel table. I am able to replicate the csv export example on github <a href=\"https://github.com/bokeh/bokeh/tree/main/examples/server/app/export_csv\" rel=\"nofollow noreferrer\">https://github.com/bokeh/bokeh/tree/main/examples/server/app/export_csv</a> with my data. However, I want to export my data as an xlsx format and not csv. I am not very familiar with Java Script so I do not know what I need to change in the download.js file so that when pressing the export buttom the data gets exported as xlsx format.</p>\n<p>Thank you for your help!</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "pandas-bokeh"
+      ],
+      "owner": {
+        "account_id": 926284,
+        "reputation": 1,
+        "user_id": 957027,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/3ca617cf2694b770e99e7f3cdce1abb5?s=256&d=identicon&r=PG",
+        "display_name": "unleashed",
+        "link": "https://stackoverflow.com/users/957027/unleashed"
+      },
+      "is_answered": false,
+      "view_count": 59,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1706381240,
+      "creation_date": 1706366420,
+      "last_edit_date": 1706369129,
+      "question_id": 77891562,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77891562/how-to-make-the-year-appear-on-the-x-axis-using-bokeh",
+      "title": "How to make the year appear on the x-axis using bokeh",
+      "body": "<p>I have a <code>csv</code> file, and is trying to make the year appear on the x-axis, but the year is unable to appear.</p>\n<pre><code>from bokeh.plotting import figure\nfrom bokeh.io import output_file, output_notebook, show\nfrom bokeh.layouts import column\nfrom bokeh.models import HoverTool, ColumnDataSource\n\ndata = pd.read_csv('amountsaved.csv')\ndata.head()\n\ndata['year']=pd.to_datetime(data['year'])\n\n\n# create a new plot with a title and axis labels\np = figure(title=&quot;amount saved&quot;, x_axis_type='datetime', x_axis_label=&quot;year&quot;, y_axis_label=&quot;amount&quot;)\n\n# add a line renderer with legend and line thickness\np.line(x, y, legend_label=&quot;amt saved&quot;, line_width=2)\n\n# Plot date along the x axis and price along the y axis\np.line(data['year'], data['amountsaved'], line_color='green')\n\n# show the results\nshow(p)\n</code></pre>\n<p>Ooutput:</p>\n<p><img src=\"https://i.stack.imgur.com/xRXTs.png\" alt=\"output\" /></p>\n<p>My data in the <code>csv</code> file only has year (eg: 2010,2011,2012) with no month. I'm not sure why the output showed month.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "plot",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 21490858,
+        "reputation": 3,
+        "user_id": 15836618,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/3604e59b56dc0ed540be89dc9b781588?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "ekim1712",
+        "link": "https://stackoverflow.com/users/15836618/ekim1712"
+      },
+      "is_answered": true,
+      "view_count": 69,
+      "accepted_answer_id": 77866140,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1706011415,
+      "creation_date": 1706010886,
+      "question_id": 77866101,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77866101/two-similar-codes-but-one-does-not-work-bokeh-for-python",
+      "title": "Two similar codes but one does not work (Bokeh for Python)",
+      "body": "<p>I have two different but similar codes in python that use Bokeh to make an interactive plot. The following code works fine (I found it online).</p>\n<pre><code>import numpy as np\n\nfrom bokeh.layouts import column, row\nfrom bokeh.models import ColumnDataSource, CustomJS, Slider\nfrom bokeh.plotting import figure, show\n\nx = np.linspace(0, 10, 500)\ny = np.sin(x)\n\nsource = ColumnDataSource(data=dict(x=x, y=y))\n\nplot = figure(y_range=(-10, 10), width=400, height=400)\n\nplot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)\n\namp = Slider(start=0.1, end=10, value=1, step=.1, title=&quot;Amplitude&quot;)\nfreq = Slider(start=0.1, end=10, value=1, step=.1, title=&quot;Frequency&quot;)\nphase = Slider(start=-6.4, end=6.4, value=0, step=.1, title=&quot;Phase&quot;)\noffset = Slider(start=-9, end=9, value=0, step=.1, title=&quot;Offset&quot;)\n\ncallback = CustomJS(args=dict(source=source, amp=amp, freq=freq, phase=phase, offset=offset),\n                    code=&quot;&quot;&quot;\n    const A = amp.value\n    const k = freq.value\n    const phi = phase.value\n    const B = offset.value\n\n    const x = source.data.x\n    const y = Array.from(x, (x) =&gt; B + A*Math.sin(k*x+phi))\n    source.data = { x, y }\n&quot;&quot;&quot;)\n\namp.js_on_change('value', callback)\nfreq.js_on_change('value', callback)\nphase.js_on_change('value', callback)\noffset.js_on_change('value', callback)\n\nshow(row(plot, column(amp, freq, phase, offset)))\n</code></pre>\n<p>However the next one does produce a plot but the sliders do not respond.</p>\n<pre><code>import numpy as np\n\nfrom bokeh.layouts import column, row\nfrom bokeh.models import ColumnDataSource, CustomJS, Slider\nfrom bokeh.plotting import figure, show\n\nx = np.linspace(0, 10, 500)\ny = np.sin(x)\n\nsource = ColumnDataSource(data=dict(x=x, y=y))\n\nplot = figure(y_range=(-10, 10), width=400, height=400)\n\nplot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)\n\namp1 = Slider(start=0, end=10, value=1, step=.1, title=&quot;Amplitude 1&quot;)\namp2 = Slider(start=0, end=10, value=0, step=.1, title=&quot;Amplitude 2&quot;)\nfreq1 = Slider(start=0, end=10, value=1, step=.1, title=&quot;Frequency 1&quot;)\nfreq2 = Slider(start=0, end=10, value=0, step=.1, title=&quot;Frequency 2&quot;)\nphase1 = Slider(start=-6.4, end=6.4, value=0, step=.1, title=&quot;Phase 1&quot;)\nphase2 = Slider(start=-6.4, end=6.4, value=0, step=.1, title=&quot;Phase 2&quot;)\noffset1 = Slider(start=-9, end=9, value=0, step=.1, title=&quot;Offset 1&quot;)\noffset2 = Slider(start=-9, end=9, value=0, step=.1, title=&quot;Offset 2&quot;)\n\ncallback = CustomJS(args=dict(source=source, amp1=amp1, freq1=freq1, phase1=phase1, offset1=offset1, amp2=amp2, freq2=freq2, phase2=phase2, offset2=offset2),\n                    code=&quot;&quot;&quot;\n    const A = amp1.value\n    const AA = amp2.value\n    const f = freq1.value\n    const ff = freq2.value\n    const phi = phase1.value\n    const phiphi = phase2.value\n    const B = offset1.value\n    const BB = offset3.value\n\n    const x = source.data.x\n    const y = Array.from(x, (x) =&gt; A*Math.sin(f*x+phi)+AA*Math.sin(ff*x+phiphi)+B+BB)\n    source.data = { x, y }\n&quot;&quot;&quot;)\n\namp1.js_on_change('value', callback)\nfreq1.js_on_change('value', callback)\nphase1.js_on_change('value', callback)\noffset1.js_on_change('value', callback)\namp2.js_on_change('value', callback)\nfreq2.js_on_change('value', callback)\nphase2.js_on_change('value', callback)\noffset2.js_on_change('value', callback)\n\nshow(row(plot, column(amp1, freq1, phase1, offset1, amp2, freq2, phase2, offset2)))\n</code></pre>\n<p>The second plotted function is a bit more complicated but it should work. Why does it not work?</p>\n<p>There is not really anything I could try other than checking my code for typos.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 13566713,
+        "reputation": 194,
+        "user_id": 9786534,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/771968bc34595468d317b6a29947e621?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "e5k",
+        "link": "https://stackoverflow.com/users/9786534/e5k"
+      },
+      "is_answered": false,
+      "view_count": 50,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1705938905,
+      "creation_date": 1705938905,
+      "question_id": 77861129,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77861129/get-the-number-of-elements-returned-by-a-cdsview-in-bokeh",
+      "title": "Get the number of elements returned by a CDSView in Bokeh",
+      "body": "<p>Given the following MRE, is it possible to access or print the number of elements resulting from the application of the <code>CDSView</code> filter on the <code>ColumnDataSource</code> in Bokeh? In this simple case, I'd like to get the information that 3 rows are returned and, if possible, access the index of <code>ColumnDataSource.data</code> of the filtered rows.</p>\n<pre class=\"lang-py prettyprint-override\"><code>from bokeh.models import BooleanFilter, CDSView, ColumnDataSource\nfrom bokeh.plotting import figure, show\n\nsource = ColumnDataSource(data=dict(x=[1, 2, 3, 4, 5], y=[1, 2, 3, 4, 5]))\nbooleansX = [True if x_val &lt; 5 else False for x_val in source.data['x']]\nbooleansY = [True if y_val &gt; 1 else False for y_val in source.data['y']]\nview = CDSView(source=source, filters=[BooleanFilter(booleansX), BooleanFilter(booleansY)])\n\np_filtered = figure(height=300, width=300)\np_filtered.circle(x=&quot;x&quot;, y=&quot;y&quot;, size=10, source=source, view=view)\n\nshow(p_filtered)\n</code></pre>\n<p>Note that this MRE is not the actual real data, I am just hoping to get this insight to debug a code using much larger CDS.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "multithreading",
+        "tkinter",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 5830599,
+        "reputation": 21,
+        "user_id": 4595255,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/e6d2b7a4acdb22d15a589838ba3152f2?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "talaman",
+        "link": "https://stackoverflow.com/users/4595255/talaman"
+      },
+      "is_answered": false,
+      "view_count": 55,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1705709106,
+      "creation_date": 1705689477,
+      "last_edit_date": 1705709106,
+      "question_id": 77848170,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77848170/how-to-run-and-update-bokeh-server-from-the-tkinter-app",
+      "title": "How to run and update bokeh server from the tkinter app?",
+      "body": "<p>I want to start bokeh server inside of the tkinter app and update document with plots when button in the app is pressed and data is updated. Server will be run locally on the client computer, no external network capability is needed. I need server to use python callbacks.</p>\n<p>I built a simple app that demonstrates this functionality, managed to start bokeh server in separate thread and display initial document. But now I'm stuck with updating document when figures has changed. Here is my code:</p>\n<pre class=\"lang-python prettyprint-override\"><code>import tkinter as tk\nfrom functools import partial\nimport threading\n\nfrom bokeh.sampledata.us_marriages_divorces import data as us_marriages_divorces\nfrom bokeh.sampledata.unemployment1948 import data as unemployment1948\nfrom bokeh.plotting import figure, curdoc\nfrom bokeh.layouts import column as column_layout\nfrom bokeh.models import ColumnDataSource, Slider\nfrom bokeh.application import Application\nfrom bokeh.application.handlers.function import FunctionHandler\nfrom bokeh.server.server import Server\n\nclass PlotBuilder():\n    def __init__(self) -&gt; None:\n        self.figures = []\n        self.marr = False\n        self.data_frame = None\n        self.data_source = None\n\n        self.server = None\n        self.server_thread = None\n\n    def load_data(self):\n        # loading dummy data\n        if self.marr:\n            print(&quot;loading data - unemployment&quot;)\n            self.data_frame = unemployment1948.copy()\n            self.marr = False\n        else:\n            print(&quot;loading data - marriages&quot;)\n            self.data_frame = us_marriages_divorces.copy()\n            self.marr = True\n\n    def build_figures(self):\n        # build set of bokeh figures. They end up in self.figures list to be \n        # added  to document via column_layout(self.figures)\n        if self.data_frame is None:\n            self.load_data()\n        print(&quot;creating figures&quot;)\n        self.data_source = ColumnDataSource(self.data_frame)\n        x_col = 'Year'\n        self.figures = []\n        for y_col in self.data_source.column_names:\n            if y_col == x_col or y_col == 'index':\n                continue\n            plot = figure(x_axis_label=x_col, y_axis_label=y_col, \n                          title=y_col, width=800, height=400)\n            plot.line(source=self.data_source, x=x_col, y=y_col, \n                      line_width=2, color=&quot;red&quot;)\n            plot.diamond(source=self.data_source, x=x_col, y=y_col, \n                         size=5, color=&quot;blue&quot;)\n            # TODO: add slider and other widgets to each figure later\n\n            self.figures.append(plot)\n\n    def build_document(self, doc):\n        # server callback\n        #documentation suggests that I need to run curdoc() to make doc \n        # thread-safe, but wherre to run it? I don't have access to doc \n        # anywhere exept here, and here it is passed from \n        # Server() callback\n\n        #doc = curdoc()\n\n        print(&quot;Building document...&quot;)\n        self.build_figures()\n        layout = column_layout(self.figures)\n        doc.add_root(layout)\n        self.figures = []\n\n        # here I'm trying to update document if new figures are \n        # generated. \n        # The function is being run, but won't update. Because of \n        # separate thread?\n        def update(doc):\n            print(&quot;run update()&quot;)\n            if len(self.figures) &gt; 0:\n                print(&quot;New figures found, building plot...&quot;)\n                layout = column_layout(self.figures)\n                doc.add_root(layout)\n                self.figures = []\n        # invoke update periodically\n        doc.add_periodic_callback(partial(update, doc=doc), 1000)\n\n\n    def start_server(self):\n        # code to start server, it will be running in separate thread.\n        self.server = Server({'/': Application(\n            FunctionHandler(self.build_document))}, num_procs=1)\n        self.server.start()\n        self.server.io_loop.add_callback(self.server.show, '/')\n        self.server.io_loop.start()\n\n\n    def show(self):\n        # actual server start in separate thread\n        if self.server_thread is None:\n            # first run - creating server\n            print(&quot;Starting server thread...&quot;)\n            self.server_thread = threading.Thread(target=self.start_server, \n                                                  daemon=True)\n            self.server_thread.start()\n            print(&quot;server thread&quot;, self.server_thread)\n        else:\n            # updating figures  - self.update() doesn't work here, pretty much \n            # expected. Should I communicate with self.thread and run it there?\n            #self.update()\n            pass\n\n\n    def update(self, doc):\n        # update figures - this method currently isn't used. Documentation suggests \n        # I need to run doc.add_next_tick_callback to update data, \n        # but where to invoke it? Also, it seems not relevant as I need \n        # to replace the whole doc (or layout inside the doc)\n        self.build_figures()\n        doc.add_next_tick_callback(partial(self.build_document, doc=doc))\n\n\n\n# Simple tkinter app. Everything works as expected here.\nclass App(tk.Tk):\n    def __init__(self, screenName: str | None = None, baseName: str | None = None, \n                 className: str = &quot;Tk&quot;, useTk: bool = True, sync: bool = False, \n                 use: str | None = None) -&gt; None:\n        super().__init__(screenName, baseName, className, useTk, sync, use)\n        self.plot_builder = PlotBuilder()\n\n        self.title(&quot;Bokeh server test app&quot;)\n        self.geometry(&quot;400x300+200+200&quot;)\n\n        btn = tk.Button(self, text=&quot;Reveal Plot&quot;, command=self.reveal_plot)\n        btn.grid(column=1, row=0)\n\n        btn2 = tk.Button(self, text=&quot;Update Data&quot;, command=self.update_data)\n        btn2.grid(column=2, row=0)\n\n\n    def reveal_plot(self):\n        # building figures and showing\n        self.plot_builder.build_figures()\n        self.plot_builder.show()\n\n    def update_data(self):\n        # reloading data and building figures\n        self.plot_builder.load_data()\n        self.plot_builder.build_figures()\n\n\n\nif __name__ == &quot;__main__&quot;:\n    app = App()\n    app.mainloop()\n</code></pre>\n<p>Some comments: <code>PlotBuilder</code> is responsible for gathering data and building plots. Also, it manages bokeh server - the part where I stuck.\nI can't just update the data source as plots count and type may change between runs in the real app.\ninit, load_data and build_figures are completely dummy and work as expected.</p>\n<p><code>App</code> is a simple demo tkinter app with two buttons. First should display plot, second - update data for plotting. This part works as expected as well.</p>\n<p>I saw <a href=\"https://stackoverflow.com/questions/55176868/asynchronous-streaming-to-embedded-bokeh-server\">this question</a> and read though relevant bokeh <a href=\"https://docs.bokeh.org/en/latest/docs/user_guide/server/app.html#updating-from-threads\" rel=\"nofollow noreferrer\">documentation</a>, but can't adapt it to what I need. I also tried (still trying) to understand how bokeh <code>serve</code> subcommand works, with no luck yet.</p>\n<p>Any advice is appreciated.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "python-3.x",
+        "bokeh",
+        "mypy"
+      ],
+      "owner": {
+        "account_id": 220522,
+        "reputation": 2044,
+        "user_id": 477969,
+        "user_type": "registered",
+        "accept_rate": 42,
+        "profile_image": "https://www.gravatar.com/avatar/9fb583e258d4164eb0f5e242e6c5cfa2?s=256&d=identicon&r=PG",
+        "display_name": "JairoV",
+        "link": "https://stackoverflow.com/users/477969/jairov"
+      },
+      "is_answered": false,
+      "view_count": 32,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1705615701,
+      "creation_date": 1705615701,
+      "question_id": 77842670,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77842670/how-to-consume-bokeh-with-mypy",
+      "title": "How to consume bokeh with mypy",
+      "body": "<p>I am using bokeh library and it states that it uses mypy internally. Thus, I infer it has good typing information which I have confirmed looking the source code.</p>\n<p>However, I notice that using mypy in my own project that imports bokeh still produces errors.\nHow I should configure mypy in my side to gracefully and correctly use the bokeh typing in when I consume the library in my project?</p>\n<p>for example, I receive this kind of error:</p>\n<pre><code>error: Incompatible types in assignment (expression has type &quot;str&quot;, variable has type &quot;Override[str]&quot;)  [assignment]\n</code></pre>\n"
+    },
+    {
+      "tags": [
+        "visual-studio-code",
+        "jupyter-notebook",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 3343640,
+        "reputation": 1357,
+        "user_id": 3671939,
+        "user_type": "registered",
+        "accept_rate": 62,
+        "profile_image": "https://www.gravatar.com/avatar/4c8bdd0445be1630b62c10d8f9e8f30a?s=256&d=identicon&r=PG",
+        "display_name": "Carlos Pinz&#243;n",
+        "link": "https://stackoverflow.com/users/3671939/carlos-pinz%c3%b3n"
+      },
+      "is_answered": false,
+      "view_count": 49,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1705596219,
+      "creation_date": 1705596219,
+      "question_id": 77841047,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77841047/how-to-update-a-bokeh-plot-inside-vscode-jupyter-notebook",
+      "title": "How to update a bokeh plot inside vscode jupyter notebook?",
+      "body": "<p>How do you update a bokeh plot inside a Jupyter notebook in VSCode, other than clearing output and redrawing?</p>\n<p>Bokeh provides a function called <code>push_notebook</code> for such type of updates (docs <a href=\"https://%20https://docs.bokeh.org/en/latest/docs/reference/io.html#bokeh.io.push_notebook\" rel=\"nofollow noreferrer\">here</a>), but I am running the code below and the plot it is never updated, as shown in the screenshot. I have <code>bokeh-3.0.3</code> and <code>jupyter_bokeh-3.0.7</code></p>\n<p>Is this functionality supported? What extra configuration is needed, then?</p>\n<pre class=\"lang-py prettyprint-override\"><code>from bokeh.plotting import figure, output_notebook, show\nfrom bokeh.io import push_notebook\nfrom time import sleep\n\n# Enable inline plotting for Jupyter Notebook\noutput_notebook()\n\n# Create a Bokeh plot\nplot = figure(title='Update Example', x_axis_label='Time', y_axis_label='Value')\nline = plot.line([], [])\nhandle = show(plot, notebook_handle=True)\n\n# Simulate updates with a sleep function\nfor i in range(10):\n    # Some simulated data update\n    x_data = [j for j in range(i + 1)]\n    y_data = [j**2 for j in range(i + 1)]\n\n    # Update the Bokeh plot\n    line.data_source.data = {'x': x_data, 'y': y_data}\n    push_notebook(handle=handle)\n\n    # Sleep for a short duration to simulate a delay\n    sleep(0.5)\n</code></pre>\n<p><a href=\"https://i.stack.imgur.com/K7izy.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/K7izy.png\" alt=\"screenshot of vscode\" /></a></p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 17095821,
+        "reputation": 31,
+        "user_id": 12370833,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/ae38f2a13981e4e8a1607ef3d4f457bb?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Shreyans Jain",
+        "link": "https://stackoverflow.com/users/12370833/shreyans-jain"
+      },
+      "is_answered": false,
+      "view_count": 60,
+      "answer_count": 0,
+      "score": 1,
+      "last_activity_date": 1705589002,
+      "creation_date": 1705557438,
+      "last_edit_date": 1705589002,
+      "question_id": 77837169,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77837169/how-to-add-self-node-arrowed-edges-to-an-interactive-network-graph-visualizati",
+      "title": "How to add self node &amp; arrowed edges to an Interactive Network Graph Visualization in Bokeh Python",
+      "body": "<p>I am trying to create an interactive visualization for a State Transition Matrix where it highlights all the state transitions and I can interact by hovering over the edges and nodes, and it highlights the tooltip and the nearby node connections. a static example looks something like this</p>\n<p><a href=\"https://i.stack.imgur.com/Wy9QA.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/Wy9QA.png\" alt=\"enter image description here\" /></a></p>\n<p>till now, I've tried making a graph in <code>bokeh</code> and it's meeting all the requirements except it's not creating self-node edges or showing a directed transition between states.</p>\n<p>Can anyone suggest how self-node edges and arrow-ed edges can be achieved in bokeh?</p>\n<p><a href=\"https://i.stack.imgur.com/CTJZ6.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/CTJZ6.png\" alt=\"enter image description here\" /></a></p>\n<p>I was able to find a small package in its beta version called <code>gravis</code> which met all my requirements but currently, it doesn't have any active support so I'm not able to use it in my project</p>\n<p><a href=\"https://i.stack.imgur.com/dfSeH.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/dfSeH.png\" alt=\"enter image description here\" /></a></p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "datetimepicker"
+      ],
+      "owner": {
+        "account_id": 10945280,
+        "reputation": 41,
+        "user_id": 8043636,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/Do2rT.jpg?s=256&g=1",
+        "display_name": "Sina Safarabadi",
+        "link": "https://stackoverflow.com/users/8043636/sina-safarabadi"
+      },
+      "is_answered": false,
+      "view_count": 70,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1704913330,
+      "creation_date": 1704908312,
+      "question_id": 77795359,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77795359/does-bokeh-datetimepicker-has-its-own-time-zone",
+      "title": "Does Bokeh DatetimePicker has it&#39;s own time zone?",
+      "body": "<p>I have created a DatetimePicker object and it seems not to care about the value I pass to it and sets to a constant time zone!</p>\n<pre><code>from datetime import timedelta, datetime\nimport pytz\n\nmt_timezone = pytz.timezone('America/Edmonton')\n\nnow = datetime.now(mt_timezone).replace(microsecond=0)\nend_picker  = DatetimePicker(value=now, title='End Time')\n\n</code></pre>\n<p>when I print the <strong>now</strong>, I see 2024-01-10 10:32:42-07:00 but bokeh plot shows 2024-01-10 03:32!!</p>\n<p>P.S. I have also tried not passing the mt_timezone to get rid of that <strong>-07:00</strong>, but nothing changes in bokeh!</p>\n<p>Am I missing something here?\nI would appreciate any help.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 2083765,
+        "reputation": 289,
+        "user_id": 1855165,
+        "user_type": "registered",
+        "accept_rate": 45,
+        "profile_image": "https://www.gravatar.com/avatar/b75c97615a3305a487a136bb92080216?s=256&d=identicon&r=PG",
+        "display_name": "user1855165",
+        "link": "https://stackoverflow.com/users/1855165/user1855165"
+      },
+      "is_answered": false,
+      "view_count": 84,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1703836583,
+      "creation_date": 1703836583,
+      "question_id": 77730835,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77730835/bokeh-div-not-updating",
+      "title": "Bokeh - Div not updating",
+      "body": "<p>I have a Bokeh application running with the Bokeh server. I am trying to update a div text based on a date range slider. It does update the first few times but when the slider goes to the last date it is available and then back the text does not get updated it remains stale. Any ideas why that is the case?\nIn the print statement I can see the text being correct but it does not get reflected in the UI.</p>\n<pre><code>   def update_div(attr, old, new):\n            value = daterangeslider.value\n            start = pd.to_datetime(value[0], unit='ms')\n            end = pd.to_datetime(value[1], unit='ms')\n            newdata = updatedata(start, end)\n            div.text = updatetext(newdata)\n            print(div.text)\n    \n    start = Datetime(2020,1,1)\n    end = Datetime(2021,1,1)\n    daterangeslider = DateRangeSlider(value=(start, end),\n                            start=start, end=end)\n    newdata = updatedata(start, end)\n    div.text = updatetext(newdata) \n    div = Div(text = txt)\n    daterangeslider.on_change('value', partial(update_div))\n</code></pre>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "pandas",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 30202911,
+        "reputation": 1,
+        "user_id": 23146704,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocIUzKnA4IubExFfdNQsu1Pl3p9bEjjL2wTCTxCbNlyA=k-s256",
+        "display_name": "CodingNoob",
+        "link": "https://stackoverflow.com/users/23146704/codingnoob"
+      },
+      "is_answered": false,
+      "view_count": 62,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1703327318,
+      "creation_date": 1703320305,
+      "last_edit_date": 1703327318,
+      "question_id": 77707063,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77707063/change-pandas-file-for-read-excel-in-bokeh-callback",
+      "title": "Change pandas file for read_excel in bokeh callback?",
+      "body": "<p>I've got a working <code>bokeh dashboard</code> with line plots that read from a <code>pandas df</code> via <code>read_excel</code>. What I want is to use a <code>RadioButtonGroup</code> to change the filename - based on the active button value - in order to read a new dataset.</p>\n<p>I'm assuming it it achieved by some sort of callback but I can't seem to work out what that is; it's worth noting I know very little about <code>JS</code> so <code>CustomJS</code> is new to me.</p>\n<p>For example:</p>\n<p>I have two files: <strong>a.xlsx</strong> and <strong>b.xlsx</strong></p>\n<pre><code>graphs = ['a', 'b']\n\nfile = '%s.xlsx' %(presumably graphs list index)\n\nbutton_group = RadioButtonGroup(labels=graphs, active=0)\n</code></pre>\n<p>And so what I want is:</p>\n<p>if active radio button is <code>a</code> then pass this into <code>pd.read_excel</code> and therefore read <code>a.xlsx</code>, if active radio button is <code>b</code> then pass this into <code>pd.read_excel</code> and so on...</p>\n<p>All the files are the same format so literally the only difference between the files is the name.</p>\n<p>I have tried looking into changing source data via <code>ColumnDataSource</code> but they mostly change the actual data with a <code>CustomJS</code> and <code>source.data.emit()</code> as opposed to loading new data in.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 10945280,
+        "reputation": 41,
+        "user_id": 8043636,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/Do2rT.jpg?s=256&g=1",
+        "display_name": "Sina Safarabadi",
+        "link": "https://stackoverflow.com/users/8043636/sina-safarabadi"
+      },
+      "is_answered": true,
+      "view_count": 123,
+      "accepted_answer_id": 77789146,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1704826905,
+      "creation_date": 1703199286,
+      "question_id": 77700912,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77700912/in-a-bokeh-plot-with-two-seperate-y-axes-how-can-i-zoom-on-y-axis-and-keep-the",
+      "title": "In a bokeh plot with two seperate y-axes, how can I zoom on y-axis and keep the second fixed?",
+      "body": "<p>I have created a bokeh plot with two lines in one plot. I have also created two separate y-axes making use of extra_y_ranges and Range1d.</p>\n<p>I can set the initial range of each y-axis. When I use the zoom wheel, it affects both y-axes but I want to only change one of them and not both.</p>\n<p>I even tried setting separate renderers, as follows but still failed to achieve the goal.</p>\n<pre><code>plot1.y_range.renderers=[line1]\nplot1.extra_y_ranges.renderers=[line2]\n</code></pre>\n<p>Can anyone help me get a separate y-axis zoom level? i.e. only zoom in one line while keeping the other one constant. Thanks.</p>\n<p>P.S. My code uses add_periodic_callback to update the plot in real-time based on a DB if that makes any difference.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "holoviews"
+      ],
+      "owner": {
+        "account_id": 369218,
+        "reputation": 1603,
+        "user_id": 716469,
+        "user_type": "registered",
+        "accept_rate": 100,
+        "profile_image": "https://www.gravatar.com/avatar/57b7b73580b94df8e3aa0ae28e55a7ee?s=256&d=identicon&r=PG",
+        "display_name": "dinya",
+        "link": "https://stackoverflow.com/users/716469/dinya"
+      },
+      "is_answered": false,
+      "view_count": 44,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1703072801,
+      "creation_date": 1703072801,
+      "question_id": 77691335,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77691335/changing-the-format-of-nested-xaxis-ticks-labels-for-the-boxplot-chart",
+      "title": "Changing the format of nested xaxis ticks labels for the boxplot chart",
+      "body": "<p>I want to change the format of the nested xaxis ticks labels for boxplot chart (<code>major</code>, <code>group</code> and <code>subgroup</code> in terms of <a href=\"https://docs.bokeh.org/en/latest/docs/reference/models/axes.html#bokeh.models.CategoricalAxis\" rel=\"nofollow noreferrer\"><code>bokeh.models.CategoricalAxis</code></a> attributes).</p>\n<p>The following code is based on <a href=\"https://holoviews.org/gallery/demos/bokeh/boxplot_chart.html\" rel=\"nofollow noreferrer\">https://holoviews.org/gallery/demos/bokeh/boxplot_chart.html</a></p>\n<pre class=\"lang-py prettyprint-override\"><code>import holoviews as hv\nfrom holoviews import dim\nhv.extension('bokeh')\n\nfrom bokeh.sampledata.autompg import autompg as df\ntitle = &quot;MPG by Cylinders and Data Source, Colored by Cylinders&quot;\nboxwhisker = hv.BoxWhisker(df, ['cyl', 'origin'], 'mpg', label=title)\nboxwhisker.opts(show_legend=False, width=600, box_fill_color=dim('origin').str(), cmap='Set1')\n</code></pre>\n<p><a href=\"https://i.stack.imgur.com/abOtR.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/abOtR.png\" alt=\"enter image description here\" /></a></p>\n<p>I want to change the format of the nested <code>group</code>-axis ticks labels (<code>cyl</code>-level).</p>\n<p>If I change <code>figure.xaxis.formatter</code> the <code>major</code> axis (<code>origin</code>-level) format is changed:</p>\n<pre class=\"lang-py prettyprint-override\"><code>from bokeh.plotting import show\nfrom bokeh.models import NumeralTickFormatter\nfigure = hv.render(boxwhisker)\nfigure.xaxis.formatter = NumeralTickFormatter(format=&quot;000&quot;)\nshow(figure)\n</code></pre>\n<p><a href=\"https://i.stack.imgur.com/K6feL.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/K6feL.png\" alt=\"enter image description here\" /></a></p>\n<p>But I can't find the attributes (or any other way) to change <code>group</code>-axis ticks labels format (<code>cyl</code>-level). Smth like <code>figure.x axis.major_label_orientation</code> for <code>major</code>-axis ticks label orientation and <code>figure.x axis.group_label_orientation</code> for <code>group</code>-axis ticks label orientation.</p>\n<p>Maybe this problem requires a very specific (custom) solution, for example pass <code>x_range</code> parameter while initializing <code>bokeh.plotting.figure(x_range=bokeh.models.FactorRange(...))</code> (seen on <a href=\"https://docs.bokeh.org/en/latest/docs/user_guide/basic/bars.html#nested-categories\" rel=\"nofollow noreferrer\">https://docs.bokeh.org/en/latest/docs/user_guide/basic/bars.html#nested-categories</a> ).\nAlso I read that categorical ranges is sequences of strings (<a href=\"https://docs.bokeh.org/en/latest/docs/user_guide/basic/bars.html#bar-charts\" rel=\"nofollow noreferrer\">here</a>). So I have to convert my dataframe columns for xaxis as strings in the format I need.</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "visualization",
+        "bokeh",
+        "panel"
+      ],
+      "owner": {
+        "account_id": 28400463,
+        "reputation": 1,
+        "user_id": 21725354,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/znwfz.jpg?s=256&g=1",
+        "display_name": "AlZ11",
+        "link": "https://stackoverflow.com/users/21725354/alz11"
+      },
+      "is_answered": false,
+      "view_count": 63,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1708672968,
+      "creation_date": 1702871161,
+      "last_edit_date": 1708672968,
+      "question_id": 77676842,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77676842/exporting-interactive-bokeh-plots-from-one-file-to-another-to-use-for-panel",
+      "title": "Exporting interactive bokeh plots from one file to another to use for panel",
+      "body": "<p>Is it possible to export a bokeh plot I created in one file to another file that will be used for my styling and layout of a data visualisation dashboard (of multiple plots) using panel?</p>\n<p>I hope to still keep the interactivity of the plot if possible.\nFor reference below might be an example of a sample code snippet/plot I might wish to export to another file (the actual code details of this specific plot are not important)</p>\n<pre><code>import pandas as pd\nfrom math import pi\nfrom bokeh.io import show\nfrom bokeh.plotting import figure\nfrom bokeh.models import CustomJS, Slider, HoverTool, ColumnDataSource\nfrom bokeh.layouts import column\nfrom bokeh.transform import cumsum\nimport colorcet\n\n# Provide some data (is not the same as in your example):\ndata = {&quot;Year&quot;: [1990, 1991, 1992],\n        &quot;Meningitis&quot;: [2159, 1592, 3914],\n        &quot;Alzheimer&quot;: [1116, 842, 534],\n        &quot;Parkinson&quot;: [371, 2376, 1675],\n        &quot;Malaria&quot;: [93, 189, 231]    \n}\ndf = pd.DataFrame(data).set_index(&quot;Year&quot;)\n\ndf_transposed = df.transpose()\ndf\n\n# Create one data frame per year and save them to a list of data frames.\n# I find it easier to keep data frames at first, because operations can\n# be applied at a higher level, so with less code:\nyear_dfs = []\nfor year in df_transposed.columns:\n    year_df = df_transposed[year].to_frame(name=&quot;Deaths&quot;)\n    year_df.index.name = &quot;Disease&quot;\n    year_df[&quot;Percent&quot;] = 100 * year_df[&quot;Deaths&quot;]/year_df[&quot;Deaths&quot;].sum()\n    year_df[&quot;angle&quot;] = year_df[&quot;Deaths&quot;]/year_df[&quot;Deaths&quot;].sum() * 2 * pi\n    # Compute start and end angle for each disease, so that the first disease starts\n    # at the top of the pie and the next ones appear in clockwise direction:\n    year_df[&quot;start_angle&quot;] = pi/2 - (year_df[&quot;angle&quot;].cumsum() - year_df[&quot;angle&quot;])\n    year_df[&quot;end_angle&quot;] = pi/2 - year_df[&quot;angle&quot;].cumsum()\n    # Set the color column. Feel free to use other palettes:\n    year_df['color'] = list(map(lambda x: colorcet.b_glasbey_category10[x], range(len(year_df))))\n    year_dfs.append(year_df)\nyear_df\n\n# Convert the dataframes to dictionaries in the ColumnDataSource data format to hand over to Javascript:\nyear_dicts = []\nfor df in year_dfs:\n    year_dicts.append(dict(ColumnDataSource(df).data))\nyear_dicts \n\n# Setup pie chart:\nheight = 550\nwidth = 650\nplot = figure(height=height, width=width, title=&quot;Diseases&quot;, x_range=(-0.6, 1.0))\n\nplot_source = ColumnDataSource(year_dicts[0])\n\nplot.wedge(x=0, y=1, radius=0.6, source=plot_source,\n         start_angle=&quot;start_angle&quot;, end_angle=&quot;end_angle&quot;, direction=&quot;clock&quot;,\n        line_color=&quot;white&quot;, legend_field='Disease', fill_color='color')\nprint(plot_source.data)\n\n# Setup hover inspection:\nhover = HoverTool()\nhover.tooltips = [(&quot;Disease&quot;, &quot;@{Disease}&quot;),\n                  (&quot;Deaths&quot;, &quot;@Deaths&quot;),\n                  (&quot;Percent&quot;, &quot;@Percent{f0.0} %&quot;)]\nplot.add_tools(hover)\n\nplot.axis.axis_label = None\nplot.axis.visible = False\nplot.grid.grid_line_color = None\nplot.outline_line_color = None\n\nplot.title.text_font_size = '16pt'\n\nplot.toolbar.active_drag = None\nplot.toolbar_location = None\n\n# Setup slider and callback:\nslider = Slider(start=1990, end=1992, value=1990, step=1, title=&quot;Select year&quot;)\n\ncallback = CustomJS(args=dict(plot_source=plot_source, sources=year_dicts), code=&quot;&quot;&quot;\n    const year_select = cb_obj.value\n    const source_list = sources\n    plot_source.data = source_list[year_select - 1990]\n&quot;&quot;&quot;)\n\nslider.js_on_change('value', callback)\n\nlayout = column(slider, plot)\n\nshow(layout)\n</code></pre>\n<p>I tried exporting as a html, but am not sure how viable that is since as far as I'm aware html scripts by themselves typically can't execute live python code</p>\n"
+    },
+    {
+      "tags": [
+        "plot",
+        "embed",
+        "bokeh",
+        "pyqt6",
+        "qwebengineview"
+      ],
+      "owner": {
+        "account_id": 30128501,
+        "reputation": 11,
+        "user_id": 23088749,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocLCeBAWMjjThfgZ1Rjon4_nWVObPfQGBmBX5Pa2evKw=k-s256",
+        "display_name": "Tristan D",
+        "link": "https://stackoverflow.com/users/23088749/tristan-d"
+      },
+      "is_answered": false,
+      "view_count": 132,
+      "answer_count": 0,
+      "score": 1,
+      "last_activity_date": 1702417656,
+      "creation_date": 1702400819,
+      "last_edit_date": 1702417656,
+      "question_id": 77647877,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77647877/pyqt6-webengineview-doesnt-load-embedded-bokeh-plot-local-bokeh-server",
+      "title": "PyQt6 WebEngineView doesn&#39;t load embedded Bokeh plot / local Bokeh server",
+      "body": "<p>I am writing a PyQt6 app that allows the user to select a .csv, and choose a column to be plot.\nA local bokeh server is created when the app starts. The plot is embedded in a PyQt6 WebEngineView that opens up in a new window.</p>\n<p>Unfortunately the url of the plot does not finish loading in the WebEngineView.</p>\n<p>I can load &quot;http://google.com&quot; fine, but the local bokeh url &quot;http://localhost:6005/base&quot; doesn't ever send the &quot;loadFinished&quot; signal.</p>\n<p>I also get &quot;doh set to &quot;&quot;  --  SystemOnly&quot; in the terminal earlier in the code. Don't know if this is an issue.</p>\n<p>Using show(p), the plot loads fine in a web browser.</p>\n<p>Am I looking in the wrong place for my issue? Is this even possible to do? Should I be using components instead (I want 100% offline application).</p>\n<pre class=\"lang-py prettyprint-override\"><code>import sys\n\nimport pandas as pd\nfrom bokeh.io import show\nfrom bokeh.models import ColumnDataSource\nfrom bokeh.plotting import curdoc, figure\nfrom PyQt6.QtWebEngineWidgets import QWebEngineView\nfrom PyQt6.QtWidgets import (\n    QApplication,\n    QFileDialog,\n    QInputDialog,\n    QLabel,\n    QMainWindow,\n    QMessageBox,\n    QPushButton,\n    QVBoxLayout,\n    QWidget,\n)\n\n\nclass CSVPlotterApp(QMainWindow):\n    def __init__(self):\n        super().__init__()\n\n        self.init_ui()\n\n        self.bokeh_server = self.create_bokeh_server()\n        \n        # Create a BokehPlotWindow instance\n        self.bokeh_plot_window = BokehPlotWindow()\n\n    def init_ui(self):\n        self.setWindowTitle(&quot;CSV Plotter&quot;)\n        self.setGeometry(100, 100, 800, 600)\n\n        self.central_widget = QWidget()\n        self.setCentralWidget(self.central_widget)\n\n        self.layout = QVBoxLayout()\n\n        self.label = QLabel(&quot;Choose a CSV file and column to plot:&quot;)\n        self.layout.addWidget(self.label)\n\n        self.file_button = QPushButton(&quot;Choose CSV File&quot;, self)\n        self.file_button.clicked.connect(self.choose_file)\n        self.layout.addWidget(self.file_button)\n\n        self.plot_button = QPushButton(&quot;Plot&quot;, self)\n        self.plot_button.clicked.connect(self.plot_data)\n        self.layout.addWidget(self.plot_button)\n\n        self.central_widget.setLayout(self.layout)\n\n        self.file_path = None\n        self.column_name = None\n\n    def choose_file(self):\n        options = QFileDialog.Option(0)\n        options |= QFileDialog.Option.ReadOnly\n\n        file_dialog = QFileDialog()\n        file_dialog.setOptions(options)\n        file_dialog.setNameFilter(&quot;CSV Files (*.csv)&quot;)\n        file_dialog.setDefaultSuffix(&quot;csv&quot;)\n\n        if file_dialog.exec() == QFileDialog.DialogCode.Accepted:\n            self.file_path = file_dialog.selectedFiles()[0]\n            self.label.setText(f&quot;Selected CSV file: {self.file_path}&quot;)\n\n            # Read the CSV file to get column names\n            try:\n                df = pd.read_csv(self.file_path)\n                column_names = df.columns.tolist()\n                column_names_str = &quot;\\n&quot;.join(column_names)\n                column_names_message = f&quot;Column Names:\\n{column_names_str}&quot;\n\n                # Display the column names\n                QMessageBox.information(self, &quot;Column Names&quot;, column_names_message)\n            except Exception as e:\n                QMessageBox.critical(self, &quot;Error&quot;, f&quot;Error reading CSV file: {str(e)}&quot;)\n\n    def plot_data(self):\n        from PyQt6.QtCore import QUrl\n        \n        if not self.file_path:\n            self.label.setText(&quot;Please choose a CSV file first.&quot;)\n            return\n\n        column_name, ok = QInputDialog.getText(self, &quot;Enter Column&quot;, &quot;Enter column name:&quot;)\n        if not ok:\n            return\n\n        self.column_name = column_name\n\n        try:\n            df = pd.read_csv(self.file_path)\n\n            # Ensure the column exists in the DataFrame\n            if self.column_name not in df.columns:\n                self.label.setText(f&quot;Column '{self.column_name}' not found in the CSV file.&quot;)\n                return\n\n            self.modify_doc(df, column_name)\n            \n            # Open the BokehPlotWindow and load the Bokeh server URL\n            url_app = QUrl(self.url)\n            # url_google = QUrl(&quot;http://google.com&quot;)\n            # self.bokeh_plot_window.web_view.setUrl(url_google)\n            self.bokeh_plot_window.web_view.setUrl(url_app)\n            self.bokeh_plot_window.show()\n            \n            print(self.bokeh_plot_window.web_view.url().toString())\n            print(self.bokeh_plot_window.web_view.loadFinished)\n            \n            self.bokeh_plot_window.web_view.loadStarted.connect(lambda: self.test(&quot;loadStarted&quot;))\n            self.bokeh_plot_window.web_view.loadProgress.connect(lambda: self.test(&quot;loadProgress&quot;))\n            self.bokeh_plot_window.web_view.loadFinished.connect(lambda: self.test(&quot;loadFinished&quot;))\n            \n        except Exception as e:\n            import traceback\n            traceback.print_exc()\n            self.label.setText(f&quot;Error plotting data: {str(e)}&quot;)\n    \n    def test(self, event_type):\n        print(f&quot;All Good - Event Type: {event_type}&quot;)\n\n    def create_bokeh_server(self):\n        # Function to create a Bokeh server instance\n        from bokeh.application import Application\n        from bokeh.application.handlers.function import FunctionHandler\n        from bokeh.server.server import Server\n\n        # Define your Bokeh app function\n        def create_empty_bokeh_server(doc):\n            # Call the modify_doc method with None values to trigger initial setup\n            self.modify_doc(None, None)\n\n        # Create the Bokeh application handler\n        handler = FunctionHandler(create_empty_bokeh_server)\n        bokeh_application = Application(handler)\n\n        # Start the Bokeh server with the Application\n        bokeh_server = Server({&quot;/base&quot;: bokeh_application}, port=6005)\n        bokeh_server.start()\n\n        # Print the server URL\n        self.url = f&quot;http://localhost:{bokeh_server.port}/base&quot;\n        print(f&quot;Bokeh server running at: {self.url}&quot;)\n\n        return bokeh_server\n\n    def modify_doc(self, df, column_name):\n        # This function is called to modify the Bokeh document with the plot\n        if df is None or column_name is None:\n            return  # Skip modification if df or column_name is None\n\n        plot_title = f&quot;Plot of {self.column_name} from {self.file_path}&quot;\n\n        source = ColumnDataSource(df)\n        x_values = [str(val) for val in df.index]\n\n        p = figure(\n            title=plot_title,\n            x_range=x_values,\n            height=400,\n            width=600,\n            toolbar_location=None,\n            tools=&quot;&quot;,\n        )\n        p.line(x=&quot;index&quot;, y=self.column_name, source=source, line_width=2)\n        \n        # show(p)\n        \n        # Get the Bokeh document using curdoc()\n        doc = curdoc()\n        print(doc._roots)\n        # Add the plot to the Bokeh document\n        doc.add_root(p)\n        print(doc._roots)\n\n\nclass BokehPlotWindow(QMainWindow):\n    def __init__(self):\n        super().__init__()\n\n        self.init_ui()\n\n    def init_ui(self):\n        self.setWindowTitle(&quot;Bokeh Plot Window&quot;)\n        self.setGeometry(100, 100, 800, 600)\n\n        self.central_widget = QWidget()\n        self.setCentralWidget(self.central_widget)\n\n        self.layout = QVBoxLayout()\n\n        # self.label = QLabel(&quot;Bokeh Plot:&quot;)\n        # self.layout.addWidget(self.label)\n\n        self.web_view = QWebEngineView()\n        self.layout.addWidget(self.web_view)\n\n        self.central_widget.setLayout(self.layout)\n\n\nif __name__ == &quot;__main__&quot;:\n    app = QApplication(sys.argv)\n    window = CSVPlotterApp()\n    window.show()\n    sys.exit(app.exec())\n</code></pre>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "slider",
+        "filtering",
+        "legend",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 2033109,
+        "reputation": 1942,
+        "user_id": 1897839,
+        "user_type": "registered",
+        "accept_rate": 93,
+        "profile_image": "https://www.gravatar.com/avatar/4c0e6f8798265cc958340ee121a018b7?s=256&d=identicon&r=PG",
+        "display_name": "Carsten",
+        "link": "https://stackoverflow.com/users/1897839/carsten"
+      },
+      "is_answered": true,
+      "view_count": 65,
+      "accepted_answer_id": 77646688,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1702389803,
+      "creation_date": 1702374826,
+      "question_id": 77645115,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77645115/bokeh-legend-breaks-on-python-callback",
+      "title": "Bokeh legend breaks on Python callback",
+      "body": "<p>I have implemented a Bokeh figure with</p>\n<ol>\n<li>a scatter plot using <code>circle()</code> with a <code>legend_group</code> for colouring and for creating an interactive legend.</li>\n<li>a range slider with a Python callback that filters the data</li>\n</ol>\n<p>I have set <code>click_policy=hide</code> for the legend so that points (circles) from a specific group are hidden when I click on a legend item.</p>\n<p>All of that works fine initially. When I move the slider, however, the legend &quot;breaks&quot;:</p>\n<ol>\n<li>Legend items disappear randomly, even though multiple groups from above are still visible</li>\n<li>The legend items that remain behave erroneously. With few initial total groups, only one item remains. With many initial groups, several tend to remain, but when I click on one of them, multiple are greyed out, while only one of the corresponding circle groups are hidden.</li>\n</ol>\n<p>This is what the initial plot looks like:</p>\n<p><a href=\"https://i.stack.imgur.com/7kUfF.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/7kUfF.png\" alt=\"Plot with full range\" /></a></p>\n<p>When I move the slider (at the bottom of the plot), some groups are correctly filtered out from the plot, but only one legend item remains, while multiple groups are still visible in the plot.</p>\n<p><a href=\"https://i.stack.imgur.com/ybdVD.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/ybdVD.png\" alt=\"Plot after moving the slider\" /></a></p>\n<p>The code is embedded into an object-oriented implementation.\nThis is the method that adds the circles to the figure:</p>\n<pre class=\"lang-py prettyprint-override\"><code>    def _add_circles(self):\n        palette = self._select_palette()\n        labels = self._data[self._LABEL_FIELD].unique().tolist()\n\n        for cluster in self._clusters:\n            glyph = self._figure.circle(\n                source=self._source,\n                x=&quot;x&quot;,\n                y=&quot;y&quot;,\n                color=factor_cmap(self._LABEL_FIELD, palette, labels),\n                legend_group=self._LABEL_FIELD,\n                view=CDSView(\n                    filter=GroupFilter(\n                        column_name=self._LABEL_FIELD, group=cluster.label\n                    ),\n                ),\n            )\n\n            if cluster.label == OUTLIERS_LABEL:\n                glyph.visible = False\n</code></pre>\n<p>This method sets up the legend:</p>\n<pre class=\"lang-py prettyprint-override\"><code>    def _setup_legend(self, legend_location: str = &quot;right&quot;, click_policy: str = &quot;hide&quot;):\n        legend = self._figure.legend[0]\n\n        legend.label_text_font_size = &quot;6px&quot;\n        legend.spacing = 0\n        legend.location = legend_location\n        legend.click_policy = click_policy\n</code></pre>\n<p>The slider with callback is added like this:</p>\n<pre class=\"lang-py prettyprint-override\"><code>    def _year_slider(self) -&gt; RangeSlider:\n        def callback(attr, old, new):  # noqa: unused-argument\n            self._source.data = self._data.loc[\n                self._data.year.between(new[0], new[1])\n            ].to_dict(orient=&quot;list&quot;)\n\n        min_year: int = self._data[self._YEAR_COLUMN].min()\n        max_year: int = self._data[self._YEAR_COLUMN].max()\n\n        slider = RangeSlider(\n            start=min_year,\n            end=max_year,\n            value=(min_year, max_year),\n            width=self._figure.frame_width,\n        )\n        slider.on_change(&quot;value_throttled&quot;, callback)\n        return slider\n</code></pre>\n<p>When I move the slider back to its original span, all legend items are displayed correctly again.</p>\n<p>The <code>Legend</code> object still contains all the <code>LegendItem</code> objects after moving the slider. All of them still have the <code>visible</code> property set to <code>true</code>.</p>\n<p>The question is: why the legend does not display all its items? How is this related to the slider and/or the callback the slider uses?</p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "holoviews",
+        "candlestick-chart",
+        "hvplot"
+      ],
+      "owner": {
+        "account_id": 8079566,
+        "reputation": 485,
+        "user_id": 6089311,
+        "user_type": "registered",
+        "profile_image": "https://lh5.googleusercontent.com/-odZVIwvKWSs/AAAAAAAAAAI/AAAAAAAAAJo/XfoQcZmThZ8/photo.jpg?sz=256",
+        "display_name": "Jan",
+        "link": "https://stackoverflow.com/users/6089311/jan"
+      },
+      "is_answered": true,
+      "view_count": 90,
+      "accepted_answer_id": 77634969,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1702214794,
+      "creation_date": 1702127357,
+      "last_edit_date": 1702214794,
+      "question_id": 77631385,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77631385/how-to-add-data-into-hover-in-hvplot-bokeh-candlestick-without-missing-date-ga",
+      "title": "How to add data into hover in Hvplot (bokeh) candlestick without missing-date gaps",
+      "body": "<p>I have an simple example, run in jupyter notebook:</p>\n<ul>\n<li>hvplot.ohlc without missing-date gaps</li>\n<li>wanted to fix Hover (add Date in the right format, and add Volume info)</li>\n</ul>\n<p>packages:</p>\n<p>python 3.12<br />\nbokeh 3.3.2<br />\nhvplot 0.9.0<br />\nholoviews 1.18.1</p>\n<pre class=\"lang-py prettyprint-override\"><code>import pandas as pd\nimport hvplot.pandas\n\ndata = pd.DataFrame({\n        &quot;Open&quot;: [100.00, 101.25, 102.75],\n        &quot;High&quot;: [104.10, 105.50, 110.00],\n        &quot;Low&quot;: [94.00, 97.10, 99.20],\n        &quot;Close&quot;: [101.15, 99.70, 109.50],\n        &quot;Volume&quot;: [10012, 5000, 18000],\n    }, index=[pd.Timestamp(&quot;2022-08-01&quot;), pd.Timestamp(&quot;2022-08-03&quot;), pd.Timestamp(&quot;2022-08-04&quot;)])\n\ndf = pd.DataFrame(data)\n# remove datetime gaps\ndf = df.reset_index(names=&quot;Date&quot;)\ndf['Idx'] = pd.RangeIndex(0, df.shape[0], 1)\n\n# fix hover ------\nfrom bokeh.models import HoverTool\n\nhover = HoverTool(\n    tooltips=[\n        ('Date', '@Date{%Y-%m-%d}'),\n        ('Open', '@Open{0.00}'),\n        ('High', '@High{0.00}'),\n        ('Low', '@Low{0.00}'),\n        ('Close', '@Close{0.00}'),\n        ('Volume', '@Volume{0}'),\n    ],\n    formatters={'@Date': 'datetime'},\n    mode='vline'\n)\n# fix hover ------\n\nohlc_cols = [&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]\nohlc = df.hvplot.ohlc(x='Idx', y=ohlc_cols, hover_cols=[&quot;Date&quot;, *ohlc_cols, &quot;Volume&quot;], tools=[hover])\n\n# fix x tick labels ------\nimport holoviews as hv\nfrom bokeh.io import show\n\nfig = hv.render(ohlc)\nfig.xaxis.major_label_overrides = {\n    i: dt.strftime(&quot;%b %d&quot;) for i, dt in enumerate(df['Date'])\n}\n# fix x tick labels ------\n\nshow(fig)\n</code></pre>\n<p>But the output is:\n<a href=\"https://i.stack.imgur.com/4G04V.png\" rel=\"nofollow noreferrer\"><img src=\"https://i.stack.imgur.com/4G04V.png\" alt=\"enter image description here\" /></a></p>\n"
+    },
+    {
+      "tags": [
+        "python",
+        "slider",
+        "bokeh",
+        "candlestick-chart",
+        "sos"
+      ],
+      "owner": {
+        "account_id": 30089536,
+        "reputation": 1,
+        "user_id": 23059278,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/a501c10822795106aa41a15fe6424966?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "wjquant",
+        "link": "https://stackoverflow.com/users/23059278/wjquant"
+      },
+      "is_answered": false,
+      "view_count": 27,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1701953295,
+      "creation_date": 1701953295,
+      "question_id": 77620131,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77620131/when-dragging-the-slider-the-15-minute-candle-chart-does-not-update-but-the-5",
+      "title": "When dragging the slider, the 15 minute candle chart does not update, but the 5-minute candlestick chart updates",
+      "body": "<p>When dragging the slider, the 15 minute candle chart does not update, but the 5-minute candlestick chart updates.</p>\n<pre><code>from bokeh.plotting import figure, curdoc\nfrom bokeh.models import ColumnDataSource, HoverTool, Slider\nimport pandas as pd\nfrom bokeh.layouts import gridplot\nimport os\n\n\nscript_dir = os.path.dirname(os.path.abspath(__file__))\n# \u52a0\u8f7d5\u5206\u949f\u6570\u636e\ncsv_file_5min = os.path.join(script_dir, 'sz123228_5min.csv')\ndf_5min = pd.read_csv(csv_file_5min)\ndf_5min[&quot;date&quot;] = pd.to_datetime(df_5min[&quot;date&quot;])\n# \u521b\u5efa5\u5206\u949f\u56fe\u8868\np_5min = figure(x_axis_type=&quot;datetime&quot;, title=f&quot;sz123228_5min&quot;, width=1000, height=300, y_axis_location=&quot;right&quot;)\np_5min.xaxis.major_label_overrides = {i: date.strftime('%m/%d %H:%M') for i, date in zip(df_5min.index, df_5min[&quot;date&quot;])}\ninc = df_5min.close &gt;= df_5min.open\ndec = df_5min.open &gt; df_5min.close\nsource_inc_5min = ColumnDataSource(df_5min[inc])\nsource_dec_5min = ColumnDataSource(df_5min[dec])\np_5min.segment(x0='index', y0='high', x1='index', y1='low', source=source_inc_5min, color=&quot;red&quot;)\np_5min.segment(x0='index', y0='high', x1='index', y1='low', source=source_dec_5min, color=&quot;green&quot;)\np_5min.vbar(x='index', width=0.5, top='open', bottom='close', source=source_inc_5min, fill_color=&quot;white&quot;, line_color=&quot;red&quot;, line_width=1)\np_5min.vbar(x='index', width=0.5, top='open', bottom='close', source=source_dec_5min, fill_color=&quot;white&quot;, line_color=&quot;green&quot;, line_width=1)\n\n# \u52a0\u8f7d15\u5206\u949f\u7ec8\u8868\u6570\u636e\ncsv_file_15min_chart = os.path.join(script_dir, 'sz123228_15min_chart.csv')\ndf_15min_chart = pd.read_csv(csv_file_15min_chart)\ndf_15min_chart[&quot;date&quot;] = pd.to_datetime(df_15min_chart[&quot;date&quot;])\n# \u521b\u5efa15\u5206\u949f\u7ec8\u8868\u56fe\u8868\np_15min = figure(x_axis_type=&quot;datetime&quot;, title=f&quot;sz123228_15min_chart&quot;, width=1000, height=300, y_axis_location=&quot;right&quot;)\np_15min.xaxis.major_label_overrides = {i: date.strftime('%m/%d %H:%M') for i, date in zip(df_15min_chart.index, df_15min_chart[&quot;date&quot;])}\ninc_15min = df_15min_chart.close &gt;= df_15min_chart.open\ndec_15min = df_15min_chart.open &gt; df_15min_chart.close\nsource_inc_15min = ColumnDataSource(df_15min_chart[inc_15min])\nsource_dec_15min = ColumnDataSource(df_15min_chart[dec_15min])\np_15min.segment(x0='index', y0='high', x1='index', y1='low', source=source_inc_15min, color=&quot;red&quot;)\np_15min.segment(x0='index', y0='high', x1='index', y1='low', source=source_dec_15min, color=&quot;green&quot;)\np_15min.vbar(x='index', width=0.5, top='open', bottom='close', source=source_inc_15min, fill_color=&quot;white&quot;, line_color=&quot;red&quot;, line_width=1)\np_15min.vbar(x='index', width=0.5, top='open', bottom='close', source=source_dec_15min, fill_color=&quot;white&quot;, line_color=&quot;green&quot;, line_width=1)\n\nhover = HoverTool()\nhover.tooltips = [(&quot;\u65e5\u671f&quot;, &quot;@date{%F %H:%M}&quot;), (&quot;\u5f00\u76d8\u4ef7&quot;, &quot;@open{0,0.000}&quot;), (&quot;\u6700\u9ad8\u4ef7&quot;, &quot;@high{0,0.000}&quot;), (&quot;\u6700\u4f4e\u4ef7&quot;, &quot;@low{0,0.000}&quot;), (&quot;\u6536\u76d8\u4ef7&quot;, &quot;@close{0,0.000}&quot;)]\nhover.formatters = {'@date': 'datetime'}\np_5min.add_tools(hover)\np_15min.add_tools(hover)\n\ninitial_date = df_5min[&quot;date&quot;].iloc[0].strftime('%m/%d %H:%M')\nslider = Slider(start=0, end=len(df_5min), value=len(df_5min), step=1, title=f'\u8d77\u70b9: {initial_date}', width=1000)\n\n# \u52a0\u8f7d15\u5206\u949f\u4e2d\u95f4\u8fc7\u7a0b\u6570\u636e\ncsv_file_15min_process = os.path.join(script_dir, 'sz123228_15min.csv')\ndf_15min_process = pd.read_csv(csv_file_15min_process)\ndf_15min_process[&quot;date&quot;] = pd.to_datetime(df_15min_process[&quot;date&quot;])\n\n\ndef slider_callback(attr, old_range, new_range):\n    end_idx = int(slider.value)\n    if end_idx &gt;= len(df_5min):\n        end_idx = len(df_5min) - 1\n\n    temp = int(end_idx / 3)  # 15&quot;\u76d8\u4e2d\u7d22\u5f15\u53f7\n    df_intraday = pd.DataFrame(columns=df_15min_chart.columns)  # \u521b\u5efa 15&quot; \u76d8\u4e2dohlc df\u4e8c\u7ef4\u7684\u6570\u636e\u7ed3\u6784\n    for i in range(temp):\n        df_intraday.loc[i] = df_15min_chart.loc[i]\n    df_intraday.loc[temp] = df_15min_process.loc[end_idx]\n    print(df_intraday)\n\n    inc_15min = df_intraday.close &gt;= df_intraday.open\n    dec_15min = df_intraday.open &gt; df_intraday.close\n    source_inc_15min.data = df_intraday[inc_15min].to_dict('list')\n    source_dec_15min.data = df_intraday[dec_15min].to_dict('list')\n\n    selected_date_5min = df_5min[&quot;date&quot;].iloc[end_idx].strftime('%m/%d %H:%M')\n    slider.title = f'{selected_date_5min};____________15&quot;\u76d8\u4e2dindex\uff1a{temp};____________5\u201cindex'\n    p_5min.x_range.start = df_5min.index[max(0, end_idx-50)] - 0.4\n    p_5min.x_range.end = df_5min.index[end_idx] + 0.4\n    p_15min.x_range.start = df_intraday.index[max(0, temp-50)] - 0.4\n    p_15min.x_range.end = df_intraday.index[temp] + 0.4\n    p_15min.add_tools(hover)\n\nslider.on_change('value', slider_callback)\napp_layout = gridplot([[p_5min], [p_15min], [slider]])\ncurdoc().add_root(app_layout)\n</code></pre>\n<p><a href=\"https://i.stack.imgur.com/bRkBH.png\" rel=\"nofollow noreferrer\">bokeh slider 15 minute candle chart does not update</a></p>\n<p>Download the attachment from the link below:</p>\n<p><a href=\"https://github.com/bokeh/bokeh/issues/13581\" rel=\"nofollow noreferrer\">Download the CSV attachment</a></p>\n<p>I want the 5-minute and 15 minute candlestick charts to be linked together when dragging the slider.</p>\n"
+    }
+  ],
+  "has_more": true,
+  "quota_max": 10000,
+  "quota_remaining": 9997
+}

@@ -1,0 +1,831 @@
+{
+  "items": [
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 2083765,
+        "reputation": 289,
+        "user_id": 1855165,
+        "user_type": "registered",
+        "accept_rate": 45,
+        "profile_image": "https://www.gravatar.com/avatar/b75c97615a3305a487a136bb92080216?s=256&d=identicon&r=PG",
+        "display_name": "user1855165",
+        "link": "https://stackoverflow.com/users/1855165/user1855165"
+      },
+      "is_answered": false,
+      "view_count": 84,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1703836583,
+      "creation_date": 1703836583,
+      "question_id": 77730835,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77730835/bokeh-div-not-updating",
+      "title": "Bokeh - Div not updating"
+    },
+    {
+      "tags": [
+        "python",
+        "pandas",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 30202911,
+        "reputation": 1,
+        "user_id": 23146704,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocIUzKnA4IubExFfdNQsu1Pl3p9bEjjL2wTCTxCbNlyA=k-s256",
+        "display_name": "CodingNoob",
+        "link": "https://stackoverflow.com/users/23146704/codingnoob"
+      },
+      "is_answered": false,
+      "view_count": 62,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1703327318,
+      "creation_date": 1703320305,
+      "last_edit_date": 1703327318,
+      "question_id": 77707063,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77707063/change-pandas-file-for-read-excel-in-bokeh-callback",
+      "title": "Change pandas file for read_excel in bokeh callback?"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 10945280,
+        "reputation": 41,
+        "user_id": 8043636,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/Do2rT.jpg?s=256&g=1",
+        "display_name": "Sina Safarabadi",
+        "link": "https://stackoverflow.com/users/8043636/sina-safarabadi"
+      },
+      "is_answered": true,
+      "view_count": 123,
+      "accepted_answer_id": 77789146,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1704826905,
+      "creation_date": 1703199286,
+      "question_id": 77700912,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77700912/in-a-bokeh-plot-with-two-seperate-y-axes-how-can-i-zoom-on-y-axis-and-keep-the",
+      "title": "In a bokeh plot with two seperate y-axes, how can I zoom on y-axis and keep the second fixed?"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "holoviews"
+      ],
+      "owner": {
+        "account_id": 369218,
+        "reputation": 1603,
+        "user_id": 716469,
+        "user_type": "registered",
+        "accept_rate": 100,
+        "profile_image": "https://www.gravatar.com/avatar/57b7b73580b94df8e3aa0ae28e55a7ee?s=256&d=identicon&r=PG",
+        "display_name": "dinya",
+        "link": "https://stackoverflow.com/users/716469/dinya"
+      },
+      "is_answered": false,
+      "view_count": 44,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1703072801,
+      "creation_date": 1703072801,
+      "question_id": 77691335,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77691335/changing-the-format-of-nested-xaxis-ticks-labels-for-the-boxplot-chart",
+      "title": "Changing the format of nested xaxis ticks labels for the boxplot chart"
+    },
+    {
+      "tags": [
+        "python",
+        "visualization",
+        "bokeh",
+        "panel"
+      ],
+      "owner": {
+        "account_id": 28400463,
+        "reputation": 1,
+        "user_id": 21725354,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/znwfz.jpg?s=256&g=1",
+        "display_name": "AlZ11",
+        "link": "https://stackoverflow.com/users/21725354/alz11"
+      },
+      "is_answered": false,
+      "view_count": 63,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1708672968,
+      "creation_date": 1702871161,
+      "last_edit_date": 1708672968,
+      "question_id": 77676842,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77676842/exporting-interactive-bokeh-plots-from-one-file-to-another-to-use-for-panel",
+      "title": "Exporting interactive bokeh plots from one file to another to use for panel"
+    },
+    {
+      "tags": [
+        "plot",
+        "embed",
+        "bokeh",
+        "pyqt6",
+        "qwebengineview"
+      ],
+      "owner": {
+        "account_id": 30128501,
+        "reputation": 11,
+        "user_id": 23088749,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocLCeBAWMjjThfgZ1Rjon4_nWVObPfQGBmBX5Pa2evKw=k-s256",
+        "display_name": "Tristan D",
+        "link": "https://stackoverflow.com/users/23088749/tristan-d"
+      },
+      "is_answered": false,
+      "view_count": 132,
+      "answer_count": 0,
+      "score": 1,
+      "last_activity_date": 1702417656,
+      "creation_date": 1702400819,
+      "last_edit_date": 1702417656,
+      "question_id": 77647877,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77647877/pyqt6-webengineview-doesnt-load-embedded-bokeh-plot-local-bokeh-server",
+      "title": "PyQt6 WebEngineView doesn&#39;t load embedded Bokeh plot / local Bokeh server"
+    },
+    {
+      "tags": [
+        "python",
+        "slider",
+        "filtering",
+        "legend",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 2033109,
+        "reputation": 1942,
+        "user_id": 1897839,
+        "user_type": "registered",
+        "accept_rate": 93,
+        "profile_image": "https://www.gravatar.com/avatar/4c0e6f8798265cc958340ee121a018b7?s=256&d=identicon&r=PG",
+        "display_name": "Carsten",
+        "link": "https://stackoverflow.com/users/1897839/carsten"
+      },
+      "is_answered": true,
+      "view_count": 65,
+      "accepted_answer_id": 77646688,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1702389803,
+      "creation_date": 1702374826,
+      "question_id": 77645115,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77645115/bokeh-legend-breaks-on-python-callback",
+      "title": "Bokeh legend breaks on Python callback"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "holoviews",
+        "candlestick-chart",
+        "hvplot"
+      ],
+      "owner": {
+        "account_id": 8079566,
+        "reputation": 485,
+        "user_id": 6089311,
+        "user_type": "registered",
+        "profile_image": "https://lh5.googleusercontent.com/-odZVIwvKWSs/AAAAAAAAAAI/AAAAAAAAAJo/XfoQcZmThZ8/photo.jpg?sz=256",
+        "display_name": "Jan",
+        "link": "https://stackoverflow.com/users/6089311/jan"
+      },
+      "is_answered": true,
+      "view_count": 90,
+      "accepted_answer_id": 77634969,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1702214794,
+      "creation_date": 1702127357,
+      "last_edit_date": 1702214794,
+      "question_id": 77631385,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77631385/how-to-add-data-into-hover-in-hvplot-bokeh-candlestick-without-missing-date-ga",
+      "title": "How to add data into hover in Hvplot (bokeh) candlestick without missing-date gaps"
+    },
+    {
+      "tags": [
+        "python",
+        "slider",
+        "bokeh",
+        "candlestick-chart",
+        "sos"
+      ],
+      "owner": {
+        "account_id": 30089536,
+        "reputation": 1,
+        "user_id": 23059278,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/a501c10822795106aa41a15fe6424966?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "wjquant",
+        "link": "https://stackoverflow.com/users/23059278/wjquant"
+      },
+      "is_answered": false,
+      "view_count": 27,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1701953295,
+      "creation_date": 1701953295,
+      "question_id": 77620131,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77620131/when-dragging-the-slider-the-15-minute-candle-chart-does-not-update-but-the-5",
+      "title": "When dragging the slider, the 15 minute candle chart does not update, but the 5-minute candlestick chart updates"
+    },
+    {
+      "tags": [
+        "python",
+        "plotly",
+        "bokeh",
+        "streamlit",
+        "holoviews"
+      ],
+      "owner": {
+        "account_id": 13762751,
+        "reputation": 7,
+        "user_id": 9932068,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/e138618d6d67821c58f4e89ace61bcea?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Mohammadreza Soltani",
+        "link": "https://stackoverflow.com/users/9932068/mohammadreza-soltani"
+      },
+      "is_answered": false,
+      "view_count": 58,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1702940929,
+      "creation_date": 1701703197,
+      "last_edit_date": 1702940929,
+      "question_id": 77600588,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77600588/interactively-harnessing-the-selected-vertical-span-the-start-and-end-x-coordin",
+      "title": "Interactively harnessing the selected vertical span (the start and end x-coordinates ) in an audio (speech) plot"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh",
+        "panel"
+      ],
+      "owner": {
+        "account_id": 27090315,
+        "reputation": 26,
+        "user_id": 20638215,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/f1ccd6032acabbca6d1fb4982664c880?s=256&d=identicon&r=PG",
+        "display_name": "ChuckLewis",
+        "link": "https://stackoverflow.com/users/20638215/chucklewis"
+      },
+      "is_answered": false,
+      "view_count": 39,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1701261395,
+      "creation_date": 1701197424,
+      "last_edit_date": 1701261395,
+      "question_id": 77566439,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77566439/parameterized-class-that-keeps-bokeh-x-and-y-range",
+      "title": "Parameterized class that keeps Bokeh x and y range"
+    },
+    {
+      "tags": [
+        "python-3.x",
+        "robotframework",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 4138680,
+        "reputation": 703,
+        "user_id": 3394661,
+        "user_type": "registered",
+        "accept_rate": 71,
+        "profile_image": "https://www.gravatar.com/avatar/9716d431e39005a552cddab48a8d9719?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Krisz",
+        "link": "https://stackoverflow.com/users/3394661/krisz"
+      },
+      "is_answered": true,
+      "view_count": 77,
+      "accepted_answer_id": 77535957,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1700733873,
+      "creation_date": 1700616837,
+      "question_id": 77526872,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77526872/how-to-include-bokeh-chart-into-robot-framework-html-report",
+      "title": "How to include bokeh chart into robot framework html report"
+    },
+    {
+      "tags": [
+        "python",
+        "html",
+        "flask",
+        "bokeh",
+        "htmx"
+      ],
+      "owner": {
+        "account_id": 29920385,
+        "reputation": 3,
+        "user_id": 22929678,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/f370f5932dc9628df0d9d22cea531316?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "btgorman",
+        "link": "https://stackoverflow.com/users/22929678/btgorman"
+      },
+      "is_answered": true,
+      "view_count": 96,
+      "accepted_answer_id": 77497511,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1700162348,
+      "creation_date": 1700157231,
+      "last_edit_date": 1700157329,
+      "question_id": 77497029,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77497029/flask-does-not-load-bokeh-plot-when-first-time-visiting-page-htmx",
+      "title": "Flask does not load Bokeh plot when first time visiting page (HTMX)"
+    },
+    {
+      "tags": [
+        "python",
+        "plot",
+        "bokeh",
+        "curve"
+      ],
+      "owner": {
+        "account_id": 29916605,
+        "reputation": 1,
+        "user_id": 22926664,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocJ1uuO0Thm-xDlS7pABiaY4P0bNDcJLyft9fle2Wx_d=k-s256",
+        "display_name": "Antoine Bois",
+        "link": "https://stackoverflow.com/users/22926664/antoine-bois"
+      },
+      "is_answered": false,
+      "view_count": 76,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1700215340,
+      "creation_date": 1700129707,
+      "last_edit_date": 1700215340,
+      "question_id": 77493940,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77493940/problem-when-i-plot-10-curve-on-bokeh-plotting",
+      "title": "problem when i plot 10+ curve on bokeh plotting"
+    },
+    {
+      "tags": [
+        "python",
+        "python-3.x",
+        "django",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 29881585,
+        "reputation": 1,
+        "user_id": 22900333,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/8f486f0758685435633de64a8ff7696b?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "developer",
+        "link": "https://stackoverflow.com/users/22900333/developer"
+      },
+      "is_answered": false,
+      "view_count": 85,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1699884257,
+      "creation_date": 1699739414,
+      "last_edit_date": 1699884257,
+      "question_id": 77466976,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77466976/bokeh-line-chart-not-displaying-lines",
+      "title": "Bokeh Line Chart not displaying Lines"
+    },
+    {
+      "tags": [
+        "python",
+        "networkx",
+        "bokeh",
+        "holoviews"
+      ],
+      "owner": {
+        "account_id": 15686358,
+        "reputation": 895,
+        "user_id": 11318930,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/e41f17b49476c79930139fe912c3ce54?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "MikeB2019x",
+        "link": "https://stackoverflow.com/users/11318930/mikeb2019x"
+      },
+      "is_answered": false,
+      "view_count": 43,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1699370413,
+      "creation_date": 1699369211,
+      "last_edit_date": 1699370413,
+      "question_id": 77439278,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77439278/holoviews-how-to-generate-legend-for-node-colors-in-network-plot",
+      "title": "Holoviews: how to generate legend for node colors in network plot"
+    },
+    {
+      "tags": [
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 8889908,
+        "reputation": 181,
+        "user_id": 6636896,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/1349c346e26509d922608fab476b5e33?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "justin",
+        "link": "https://stackoverflow.com/users/6636896/justin"
+      },
+      "is_answered": false,
+      "view_count": 28,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1699046796,
+      "creation_date": 1699046796,
+      "question_id": 77419791,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77419791/can-hovertool-interpolate-a-point-on-a-straight-line",
+      "title": "Can HoverTool interpolate a point on a straight line?"
+    },
+    {
+      "tags": [
+        "python",
+        "pandas",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 99426,
+        "reputation": 9169,
+        "user_id": 268581,
+        "user_type": "registered",
+        "accept_rate": 59,
+        "profile_image": "https://www.gravatar.com/avatar/d602eadb9367e8c1a2e00c0bef73555c?s=256&d=identicon&r=PG",
+        "display_name": "dharmatech",
+        "link": "https://stackoverflow.com/users/268581/dharmatech"
+      },
+      "is_answered": false,
+      "view_count": 55,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1699068642,
+      "creation_date": 1699025250,
+      "question_id": 77417898,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77417898/combine-two-charts-u-s-treasuries-data-and-spx",
+      "title": "Combine two charts (U.S. Treasuries data and $SPX)"
+    },
+    {
+      "tags": [
+        "javascript",
+        "python",
+        "callback",
+        "bokeh",
+        "strict-mode"
+      ],
+      "owner": {
+        "account_id": 29809375,
+        "reputation": 1,
+        "user_id": 22845185,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/d8678f789b134fbae23d4aa456e65bcc?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Jason",
+        "link": "https://stackoverflow.com/users/22845185/jason"
+      },
+      "is_answered": true,
+      "view_count": 76,
+      "accepted_answer_id": 77470967,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1699829114,
+      "creation_date": 1698919010,
+      "question_id": 77408590,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77408590/bokeh-major-label-overrides-doesnt-get-updated-after-customjs-callback",
+      "title": "Bokeh: major_label_overrides doesn&#39;t get updated after CustomJS callback"
+    },
+    {
+      "tags": [
+        "python-3.x",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 11436470,
+        "reputation": 315,
+        "user_id": 8383726,
+        "user_type": "registered",
+        "accept_rate": 80,
+        "profile_image": "https://lh4.googleusercontent.com/-2CVVXRtWZYI/AAAAAAAAAAI/AAAAAAAAAf4/2pjL7KAVZCU/photo.jpg?sz=256",
+        "display_name": "Vondoe79",
+        "link": "https://stackoverflow.com/users/8383726/vondoe79"
+      },
+      "is_answered": false,
+      "view_count": 136,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1698901003,
+      "creation_date": 1698876455,
+      "last_edit_date": 1698901003,
+      "question_id": 77405883,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77405883/my-python-bokeh-plot-not-displaying-in-browser-raise-protocolerrortoken-is-e",
+      "title": "My Python Bokeh plot not displaying in browser: &quot;raise ProtocolError(&quot;Token is expired.&quot;)"
+    },
+    {
+      "tags": [
+        "javascript",
+        "html",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 3236471,
+        "reputation": 6458,
+        "user_id": 2730554,
+        "user_type": "registered",
+        "accept_rate": 80,
+        "profile_image": "https://www.gravatar.com/avatar/38aa1816d99c1ac22f7ca674c67dc154?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "mHelpMe",
+        "link": "https://stackoverflow.com/users/2730554/mhelpme"
+      },
+      "is_answered": false,
+      "view_count": 51,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1698417535,
+      "creation_date": 1698417535,
+      "question_id": 77375061,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77375061/embed-bokeh-chart-dynamically",
+      "title": "embed bokeh chart dynamically"
+    },
+    {
+      "tags": [
+        "bokeh",
+        "hvplot"
+      ],
+      "owner": {
+        "account_id": 14816752,
+        "reputation": 11,
+        "user_id": 16661770,
+        "user_type": "registered",
+        "profile_image": "https://lh5.googleusercontent.com/-lf4fHK8SKOA/AAAAAAAAAAI/AAAAAAAANaQ/ekcd-acR-Ak/photo.jpg?sz=256",
+        "display_name": "Dublin Nichols",
+        "link": "https://stackoverflow.com/users/16661770/dublin-nichols"
+      },
+      "is_answered": false,
+      "view_count": 59,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1698362377,
+      "creation_date": 1698357259,
+      "last_edit_date": 1698362377,
+      "question_id": 77370488,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77370488/hvplot-creating-border-around-plot",
+      "title": "hvplot: Creating border around plot"
+    },
+    {
+      "tags": [
+        "python",
+        "server",
+        "tooltip",
+        "bokeh",
+        "tornado"
+      ],
+      "owner": {
+        "account_id": 110976,
+        "reputation": 3581,
+        "user_id": 293420,
+        "user_type": "registered",
+        "accept_rate": 92,
+        "profile_image": "https://www.gravatar.com/avatar/e9f90a3d760a38895dceaeec309ab06e?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "lesolorzanov",
+        "link": "https://stackoverflow.com/users/293420/lesolorzanov"
+      },
+      "is_answered": false,
+      "view_count": 90,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1699443198,
+      "creation_date": 1698242752,
+      "question_id": 77360224,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77360224/bokeh-standalone-embed-serve-folder-for-content-v-3-3-0-2023",
+      "title": "Bokeh standalone embed serve folder for content (v 3.3.0 2023)"
+    },
+    {
+      "tags": [
+        "python",
+        "histogram",
+        "bokeh",
+        "orientation"
+      ],
+      "owner": {
+        "account_id": 18133521,
+        "reputation": 11,
+        "user_id": 13188343,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/53ea38e1a563135a7eac975cd1a51398?s=256&d=identicon&r=PG&f=y&so-version=2",
+        "display_name": "Lili",
+        "link": "https://stackoverflow.com/users/13188343/lili"
+      },
+      "is_answered": false,
+      "view_count": 65,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1698224132,
+      "creation_date": 1698170941,
+      "last_edit_date": 1698224132,
+      "question_id": 77354473,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77354473/histogram-with-two-y-axis-count-and-percentage-in-bokeh",
+      "title": "Histogram with two y-axis &#39;count&#39; and &#39;percentage&#39; in bokeh?"
+    },
+    {
+      "tags": [
+        "python-3.x",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 29736173,
+        "reputation": 3,
+        "user_id": 22789660,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/ACg8ocJAnwyI9bG59NEZF3kkDaDtrrPBiPivw4uZAnZ0zFYK6Q=k-s256",
+        "display_name": "Christian Sayers",
+        "link": "https://stackoverflow.com/users/22789660/christian-sayers"
+      },
+      "is_answered": true,
+      "view_count": 74,
+      "accepted_answer_id": 77503296,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1700641130,
+      "creation_date": 1698075660,
+      "last_edit_date": 1698082061,
+      "question_id": 77346555,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77346555/python-panel-param-application-with-disappearing-bokeh-graphs-every-3rd-reload",
+      "title": "Python Panel/Param application with disappearing Bokeh graphs every 3rd reload"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 3669927,
+        "reputation": 1170,
+        "user_id": 3057377,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/Getpi.png?s=256&g=1",
+        "display_name": "nico",
+        "link": "https://stackoverflow.com/users/3057377/nico"
+      },
+      "is_answered": true,
+      "view_count": 79,
+      "answer_count": 1,
+      "score": 0,
+      "last_activity_date": 1697886128,
+      "creation_date": 1697461459,
+      "question_id": 77302216,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77302216/bokeh-sticky-crosshair",
+      "title": "Bokeh sticky crosshair"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 14432080,
+        "reputation": 1299,
+        "user_id": 10856988,
+        "user_type": "registered",
+        "profile_image": "https://i.stack.imgur.com/DDlHR.png?s=256&g=1",
+        "display_name": "srt111",
+        "link": "https://stackoverflow.com/users/10856988/srt111"
+      },
+      "is_answered": false,
+      "view_count": 59,
+      "answer_count": 0,
+      "score": 1,
+      "last_activity_date": 1697346857,
+      "creation_date": 1697343234,
+      "last_edit_date": 1697346857,
+      "question_id": 77295278,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77295278/displaying-filtered-dataframe-in-hovertooltip-bokeh",
+      "title": "Displaying &#39;FILTERED&#39; Dataframe in HoverToolTip (Bokeh)"
+    },
+    {
+      "tags": [
+        "bokeh",
+        "holoviews"
+      ],
+      "owner": {
+        "account_id": 1665139,
+        "reputation": 51,
+        "user_id": 1630758,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/591a822e9ecfd68e40bcd0f082377b48?s=256&d=identicon&r=PG",
+        "display_name": "vandel",
+        "link": "https://stackoverflow.com/users/1630758/vandel"
+      },
+      "is_answered": false,
+      "view_count": 35,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1697115992,
+      "creation_date": 1697072734,
+      "last_edit_date": 1697115992,
+      "question_id": 77277132,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77277132/using-holoviews-adjointlayout-with-bokeh-cannot-get-right-plot-to-zoom-the-verti",
+      "title": "Using Holoviews AdjointLayout with Bokeh cannot get right plot to zoom the vertical axis with box zoom in the main panel"
+    },
+    {
+      "tags": [
+        "python",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 2880464,
+        "reputation": 83,
+        "user_id": 2764562,
+        "user_type": "registered",
+        "profile_image": "https://www.gravatar.com/avatar/163a769642b65d83c1c32d4edebb0df6?s=256&d=identicon&r=PG",
+        "display_name": "user7980",
+        "link": "https://stackoverflow.com/users/2764562/user7980"
+      },
+      "is_answered": true,
+      "view_count": 57,
+      "accepted_answer_id": 77260600,
+      "answer_count": 1,
+      "score": 1,
+      "last_activity_date": 1696946831,
+      "creation_date": 1696844762,
+      "last_edit_date": 1696946831,
+      "question_id": 77257812,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77257812/python-bokeh-customjs-does-not-update-the-colors-of-the-nodes-in-a-networkrende",
+      "title": "Python Bokeh: CustomJS does not update the colors of the nodes in a NetworkRenderer"
+    },
+    {
+      "tags": [
+        "python",
+        "heroku",
+        "bokeh"
+      ],
+      "owner": {
+        "account_id": 29016216,
+        "reputation": 1,
+        "user_id": 22226585,
+        "user_type": "registered",
+        "profile_image": "https://lh3.googleusercontent.com/a/AAcHTtfNn4ki4oyvt8ahtQAyBl2T_9fYEuQcqPepqTX87TQo=k-s256",
+        "display_name": "Claes",
+        "link": "https://stackoverflow.com/users/22226585/claes"
+      },
+      "is_answered": false,
+      "view_count": 68,
+      "answer_count": 0,
+      "score": 0,
+      "last_activity_date": 1696691964,
+      "creation_date": 1696691637,
+      "last_edit_date": 1696691964,
+      "question_id": 77250361,
+      "content_license": "CC BY-SA 4.0",
+      "link": "https://stackoverflow.com/questions/77250361/a-simple-bokeh-chart-on-heruko-doesnt-show-only-a-blank-page",
+      "title": "A simple Bokeh chart on Heruko doesn&#39;t show - only a blank page"
+    }
+  ],
+  "has_more": true,
+  "quota_max": 10000,
+  "quota_remaining": 9996
+}
