@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def runtime_of_barchart():
     x = list(range(1, 6))
-    y = [temp**2 for temp in x]
+    y = [temp ** 2 for temp in x]
     plt.bar(x, y)
     plt.xlabel('Days')
     plt.ylabel('Temperature in C°')
@@ -12,6 +12,7 @@ def runtime_of_barchart():
     file_name = f'line_chart_.png'
     plt.savefig(file_name)
     plt.close()
+
 
 runtime = timeit.timeit(stmt=runtime_of_barchart, number=5)
 average = runtime / 5
