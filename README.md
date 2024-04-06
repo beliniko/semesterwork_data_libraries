@@ -6,10 +6,14 @@
 
 # Run benchmarks
 
-    py.test --benchmark-sort=name 
+    py.test --benchmark-sort=name
 
 or
 
     py.test --benchmark-sort=name -m piechart
+
+or
+
+    py.test --benchmark-sort=name --benchmark-histogram=result-hist --benchmark-save-data --benchmark-warmup=on --benchmark-warmup-iterations=2
 
 s. [pytest.ini](./pytest.ini)

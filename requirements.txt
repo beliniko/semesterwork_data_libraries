@@ -2,6 +2,7 @@ pytest
 bokeh==3.3.2
 matplotlib==3.7.4
 pytest-benchmark
-selenium
 pillow
 pandas==2.2.1
+pygal
+pygaljs
