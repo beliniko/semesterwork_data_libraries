@@ -4,3 +4,4 @@ matplotlib==3.7.4
 pytest-benchmark
 selenium
 pillow
+pandas==2.2.1

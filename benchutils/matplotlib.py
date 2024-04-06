@@ -1,6 +1,10 @@
 from io import BytesIO
 import matplotlib.pyplot as plt
 
+def init():
+    plt.clf()
+    plt.cla()
+
 def render(figure):
     # Create a BytesIO object
     svg_file = BytesIO()
@@ -20,6 +24,7 @@ def linechart(data):
     plt.xlabel('Days')
     plt.ylabel('Temperature in C°')
     plt.title('Measurment of a device')
+    # plt.show()
     return render(plt)
 
 def barchart(data):
@@ -28,4 +33,11 @@ def barchart(data):
     plt.xlabel('Days')
     plt.ylabel('Temperature in C°')
     plt.title('Measurment of a device')
+    # plt.show()
+    return render(plt)
+
+def piechart(data):
+    labels, sizes = zip(*data)
+    plt.pie(sizes, labels=labels)
+    # plt.show()
     return render(plt)
